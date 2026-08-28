@@ -1,613 +1,241 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiebres — Open 25</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Status Sell Out - Open 25</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --red: #E24B4A; --red-light: #FCEBEB; --red-dark: #791F1F;
-    --amber: #EF9F27; --amber-light: #FAEEDA; --amber-dark: #633806;
-    --green: #1D9E75; --green-light: #EAF3DE; --green-dark: #27500A;
-    --gray-50: #F8F8F6; --gray-100: #F1EFE8; --gray-200: #D3D1C7;
-    --gray-400: #888780; --gray-700: #444441; --gray-900: #2C2C2A;
-    --border: 1px solid #E8E6E0;
-    --radius: 8px; --radius-lg: 12px;
-    --font: 'Inter', system-ui, sans-serif;
-  }
-
-  body {
-    font-family: var(--font);
-    background: var(--gray-50);
-    color: var(--gray-900);
-    min-height: 100vh;
-  }
-
-  header {
-    background: var(--gray-900);
-    color: #fff;
-    padding: 20px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 3px solid var(--red);
-  }
-
-  .header-left { display: flex; flex-direction: column; gap: 2px; }
-  .header-title { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
-  .header-sub { font-size: 12px; color: var(--gray-400); }
-
-  .legend {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--gray-200);
-  }
-  .legend-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-  }
-
-  main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
-
-  .kpi-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .kpi {
-    background: #fff;
-    border: var(--border);
-    border-radius: var(--radius-lg);
-    padding: 16px 20px;
-  }
-  .kpi-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--gray-400);
-    margin-bottom: 6px;
-  }
-  .kpi-value {
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: -1px;
-    line-height: 1;
-  }
-  .kpi-sub {
-    font-size: 11px;
-    color: var(--gray-400);
-    margin-top: 4px;
-  }
-  .kpi.danger .kpi-value { color: var(--red); }
-  .kpi.warn .kpi-value { color: var(--amber); }
-  .kpi.ok .kpi-value { color: var(--green); }
-
-  .section-title {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--gray-400);
-    margin-bottom: 12px;
-  }
-
-  .bars-card {
-    background: #fff;
-    border: var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px 24px;
-    margin-bottom: 16px;
-  }
-
-  .bar-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 9px;
-  }
-  .bar-row:last-child { margin-bottom: 0; }
-
-  .bar-prod-label {
-    font-size: 12px;
-    color: var(--gray-700);
-    width: 140px;
-    flex-shrink: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .bar-track {
-    flex: 1;
-    height: 20px;
-    background: var(--gray-100);
-    border-radius: 4px;
-    overflow: hidden;
-    display: flex;
-  }
-
-  .bar-ok { background: var(--green); height: 100%; }
-  .bar-no { background: var(--red); height: 100%; }
-
-  .bar-pct {
-    font-size: 12px;
-    font-weight: 600;
-    width: 46px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .bar-count {
-    font-size: 11px;
-    color: var(--gray-400);
-    width: 60px;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  .filters-bar {
-    background: #fff;
-    border: var(--border);
-    border-radius: var(--radius-lg);
-    padding: 14px 20px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-
-  .filters-bar input[type="text"] {
-    font-family: var(--font);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: var(--border);
-    border-radius: var(--radius);
-    background: var(--gray-50);
-    color: var(--gray-900);
-    width: 220px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  .filters-bar input[type="text"]:focus { border-color: var(--gray-400); }
-
-  .filters-bar select {
-    font-family: var(--font);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: var(--border);
-    border-radius: var(--radius);
-    background: var(--gray-50);
-    color: var(--gray-900);
-    cursor: pointer;
-    outline: none;
-  }
-
-  .filter-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: var(--gray-400);
-  }
-
-  .counter {
-    margin-left: auto;
-    font-size: 12px;
-    color: var(--gray-400);
-    white-space: nowrap;
-  }
-
-  .table-wrap {
-    background: #fff;
-    border: var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    table-layout: fixed;
-  }
-
-  thead {
-    background: var(--gray-100);
-    border-bottom: var(--border);
-  }
-
-  th {
-    padding: 10px 14px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--gray-400);
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
-    border-right: var(--border);
-  }
-  th:last-child { border-right: none; }
-  th:hover { color: var(--gray-900); background: var(--gray-200); }
-  th.sorted { color: var(--gray-900); }
-
-  .sort-arrow { margin-left: 4px; opacity: .4; font-size: 10px; }
-  th.sorted .sort-arrow { opacity: 1; }
-
-  td {
-    padding: 10px 14px;
-    border-bottom: var(--border);
-    border-right: 1px solid var(--gray-100);
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  td:last-child { border-right: none; white-space: normal; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: var(--gray-50); }
-
-  .col-id   { width: 56px; }
-  .col-dir  { width: 220px; }
-  .col-bar  { width: 120px; }
-  .col-fmt  { width: 100px; }
-  .col-vta  { width: 75px; }
-  .col-q    { width: 80px; }
-  .col-prod { width: auto; }
-
-  .badge-q {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-align: center;
-    min-width: 28px;
-  }
-  .bq0 { background: var(--green-light); color: var(--green-dark); }
-  .bq1 { background: var(--amber-light); color: var(--amber-dark); }
-  .bq2 { background: var(--amber-light); color: var(--amber-dark); }
-  .bq3 { background: var(--red-light); color: var(--red-dark); }
-  .bq4 { background: var(--red-light); color: var(--red-dark); }
-  .bq5 { background: #F7C1C1; color: #501313; }
-
-  .fmt-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 500;
-    background: var(--gray-100);
-    color: var(--gray-700);
-    border: var(--border);
-  }
-
-  .prod-dots {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 5px;
-  }
-  .dot-p {
-    width: 9px; height: 9px;
-    border-radius: 2px;
-    flex-shrink: 0;
-    cursor: default;
-    position: relative;
-  }
-  .dot-ok { background: var(--green); }
-  .dot-no { background: var(--red); }
-
-  .prod-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
-  }
-  .prod-tag-no {
-    display: inline-block;
-    padding: 1px 7px;
-    border-radius: 3px;
-    font-size: 10px;
-    background: var(--red-light);
-    color: var(--red-dark);
-    font-weight: 500;
-  }
-  .full-line {
-    font-size: 11px;
-    color: var(--green);
-    font-weight: 500;
-  }
-
-  .no-results {
-    padding: 3rem;
-    text-align: center;
-    color: var(--gray-400);
-    font-size: 13px;
-  }
-
-  .prod-legend {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    padding: 10px 14px;
-    background: var(--gray-50);
-    border-top: var(--border);
-    font-size: 10px;
-    color: var(--gray-400);
-    align-items: center;
-  }
-  .prod-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .prod-legend-dot {
-    width: 9px; height: 9px; border-radius: 2px;
-  }
-
-  @media (max-width: 900px) {
-    main { padding: 16px; }
-    header { padding: 16px; }
-    .kpi-row { grid-template-columns: repeat(2, 1fr); }
-    .col-dir { width: 140px; }
-    .col-bar { width: 90px; }
-  }
-</style>
-</head>
-<body>
+:root{--bg:#14110E;--surf:#1D1913;--surf2:#262019;--txt:#F5EFE4;--mut:#A79B87;--dim:#6E6357;
+--gold:#F2B33D;--paprika:#E2603F;--oliva:#9DB068;--azul:#6FA0C4;--line:rgba(245,239,228,.10)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.55;
+background-image:radial-gradient(1200px 500px at 15% -10%,rgba(242,179,61,.09),transparent 60%)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px 90px}
+header{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:Syne,sans-serif;font-weight:800;font-size:clamp(34px,5.5vw,60px);line-height:1.02;margin:14px 0 10px;letter-spacing:-.02em}
+h1 em{font-style:normal;color:var(--gold)}
+.sub{color:var(--mut);max-width:66ch}
+h2{font-family:Syne,sans-serif;font-weight:700;font-size:26px;letter-spacing:-.01em;margin:0 0 4px}
+h3{font-family:Syne,sans-serif;font-weight:600;font-size:17px;margin:0 0 14px}
+section{padding:52px 0 0}
+.shead{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;border-top:1px solid var(--line);padding-top:26px}
+.shead .num{font-family:'DM Mono',monospace;color:var(--dim);font-size:13px}
+.shead p{margin:6px 0 0;color:var(--mut);font-size:14px;max-width:70ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:30px 0 0}
+.kpi{background:var(--surf);padding:20px 18px}
+.kpi-v{font-family:Syne,sans-serif;font-weight:700;font-size:30px;line-height:1.04;word-break:break-word}
+.kpi-v.sm{font-size:23px}
+.kpi-l{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);margin-top:9px}
+.kpi-s{font-size:12.5px;color:var(--dim);margin-top:4px}
+.kpi.alert .kpi-v{color:var(--paprika)} .kpi.good .kpi-v{color:var(--oliva)} .kpi.hi .kpi-v{color:var(--gold)}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.grid3{grid-template-columns:1fr}}
+tr.hd td{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(242,179,61,.06);padding-top:14px}
+tr.tot td{border-top:1px solid var(--line);font-weight:600}
+.defs{display:grid;grid-template-columns:1fr 1fr;gap:16px} @media(max-width:860px){.defs{grid-template-columns:1fr}}
+.def{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.def>b{font-family:Syne;font-size:15px;display:block;margin-bottom:6px}
+.def p{margin:0;color:var(--mut);font-size:13.5px} .def code{font-family:'DM Mono',monospace;color:var(--gold);font-size:13px}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.grid{stroke:var(--line);stroke-width:1} .grid.strong{stroke:rgba(245,239,228,.25)}
+.grid.quiebre{stroke:var(--paprika);stroke-dasharray:4 4;opacity:.65}
+text{font-family:'DM Mono',monospace}
+.tick{font-size:11.5px;fill:var(--mut)} .tick.alt{fill:var(--azul)} .tick.warn{fill:var(--paprika)}
+.val{font-size:12px;fill:var(--txt);font-weight:500}
+.val.halo{paint-order:stroke;stroke:#14110E;stroke-width:4px;stroke-linejoin:round} .val.alt{fill:var(--azul)}
+.val.oliva-t{fill:var(--oliva)} .val.paprika-t{fill:var(--paprika)}
+.tick.oliva-t{fill:var(--oliva)} .tick.paprika-t{fill:var(--paprika)}
+.lab{font-size:12.5px;fill:var(--txt);font-family:Inter,sans-serif}
+.serie{font-size:12px} .inbar{font-size:11px;fill:#14110E;font-weight:500}
+.bar{fill:var(--gold);opacity:.9} .bar.partial{opacity:.42}
+.bar.oliva{fill:var(--oliva)} .bar.paprika{fill:var(--paprika)}
+.lineB{fill:none;stroke:var(--azul);stroke-width:2.2;stroke-linejoin:round} .dotB{fill:var(--azul)}
+.lineA{fill:none;stroke:var(--gold);stroke-width:2.4;stroke-linejoin:round} .dotA{fill:var(--gold)}
+.area{fill:var(--gold);opacity:.10}
+.spark{width:90px;height:24px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th.num,td.num{text-align:right} th:hover{color:var(--gold)}
+td{padding:9px;border-bottom:1px solid rgba(245,239,228,.05);white-space:nowrap}
+tbody tr:hover{background:rgba(242,179,61,.05)}
+td.nm{font-weight:500;white-space:normal} td.nm i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:9px}
+td.strong{font-weight:600} td.dim{color:var(--dim)}
+td.tag{font-family:'DM Mono',monospace;font-size:11px;color:var(--mut)}
+.pill{font-family:'DM Mono',monospace;font-size:11.5px;padding:3px 8px;border-radius:20px}
+.pill.r{background:rgba(226,96,63,.18);color:var(--paprika)}
+.pill.y{background:rgba(242,179,61,.16);color:var(--gold)}
+.pill.g{background:rgba(157,176,104,.16);color:var(--oliva)}
+.pill.n{background:rgba(245,239,228,.08);color:var(--mut)}
+.barcell{width:26%} .barcell span{display:block;height:7px;border-radius:4px;background:var(--gold);opacity:.75}
+.scroll{overflow-x:auto;max-height:560px;overflow-y:auto}
+.alerta{border:1px solid rgba(226,96,63,.45);background:linear-gradient(180deg,rgba(226,96,63,.11),rgba(226,96,63,.03));
+border-radius:14px;padding:26px 26px;margin-top:30px}
+.alerta h3{color:var(--paprika);margin-bottom:8px}
+.alerta p{margin:0 0 10px;color:var(--txt);max-width:88ch}
+.note{font-size:12.5px;color:var(--dim);margin-top:12px}
+.tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+input[type=search]{background:var(--surf2);border:1px solid var(--line);color:var(--txt);padding:9px 13px;border-radius:8px;
+font-family:Inter;font-size:13.5px;min-width:260px}
+input[type=search]:focus{outline:2px solid var(--gold);outline-offset:1px}
+.legendline{display:flex;gap:20px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:12px;color:var(--mut);margin-top:14px}
+.legendline b{color:var(--txt);font-weight:500}
+ol.rec{counter-reset:r;list-style:none;padding:0;margin:0;display:grid;gap:14px}
+ol.rec li{counter-increment:r;background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:18px 20px 18px 62px;position:relative}
+ol.rec li:before{content:counter(r,decimal-leading-zero);position:absolute;left:20px;top:17px;font-family:'DM Mono',monospace;
+color:var(--gold);font-size:13px}
+ol.rec b{font-family:Syne;font-size:15px}
+ol.rec p{margin:5px 0 0;color:var(--mut);font-size:14px}
+footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim);font-size:12.5px;font-family:'DM Mono',monospace}
+</style></head><body><div class="wrap">
 
 <header>
-  <div class="header-left">
-    <div class="header-title">Quiebres de stock — Cadena Open 25</div>
-    <div class="header-sub">Relevamiento tienda por tienda · 7 productos · 34 de 73 sucursales relevadas</div>
-  </div>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div> Con stock</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div> Sin stock</div>
-  </div>
+<div class="eyebrow">Murken · Marzo – Agosto 2026</div>
+<h1>Status Sell Out<em> — </em>Open 25</h1>
+<p class="sub">Qué compró la cadena, qué vendió al consumidor y cómo evolucionó la presencia en tiendas.</p>
+<div class="kpis">
+<div class="kpi hi"><div class="kpi-v">10.233</div><div class="kpi-l">Unidades sell-out</div><div class="kpi-s">Mar–Ago 2026</div></div>
+<div class="kpi "><div class="kpi-v">416,9</div><div class="kpi-l">Cajas vendidas</div><div class="kpi-s">equivalente a bultos</div></div>
+<div class="kpi "><div class="kpi-v">690,7 kg</div><div class="kpi-l">Volumen vendido</div><div class="kpi-s">unidades × gramaje</div></div>
+<div class="kpi good"><div class="kpi-v">21.480</div><div class="kpi-l">Unidades sell-in</div><div class="kpi-s">3 entregas</div></div>
+<div class="kpi alert"><div class="kpi-v">11.247</div><div class="kpi-l">Stock teórico en cadena</div><div class="kpi-s">sell-in − sell-out</div></div>
+<div class="kpi "><div class="kpi-v">117</div><div class="kpi-l">Locales con venta</div><div class="kpi-s">pico de 94 en julio</div></div>
+</div>
 </header>
 
-<main>
-  <div class="kpi-row" id="kpis">
-    <div class="kpi"><div class="kpi-label">Sucursales</div><div class="kpi-value" id="k1">72</div><div class="kpi-sub">relevadas</div></div>
-    <div class="kpi danger"><div class="kpi-label">Con quiebres</div><div class="kpi-value" id="k2">—</div><div class="kpi-sub" id="k2s">—</div></div>
-    <div class="kpi danger"><div class="kpi-label">Posiciones rotas</div><div class="kpi-value" id="k3">—</div><div class="kpi-sub" id="k3s">—</div></div>
-    <div class="kpi ok"><div class="kpi-label">Línea completa</div><div class="kpi-value" id="k4">—</div><div class="kpi-sub" id="k4s">—</div></div>
-  </div>
 
-  <div class="bars-card">
-    <div class="section-title">% de quiebre por producto — 34 de 73 sucursales relevadas</div>
-    <div id="barsContainer"></div>
-    <div style="display:flex;gap:16px;margin-top:14px;font-size:11px;color:var(--gray-400)">
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#1D9E75;display:inline-block"></span>Con stock</span>
-      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;display:inline-block"></span>Sin stock (quiebre)</span>
-    </div>
-  </div>
+<section>
+<div class="shead"><span class="num">01</span><div><h2>Sell-out total de la cadena</h2>
+<p>Unidades vendidas al consumidor por mes (barras) contra locales activos (línea).</p></div></div>
+<div class="card"><svg viewBox="0 0 760 330" class="chart"><line x1="52" y1="278.0" x2="708" y2="278.0" class="grid"/><text x="42.0" y="282.0" text-anchor="end" class="tick">0</text><text x="718.0" y="282.0" text-anchor="start" class="tick alt">0</text><line x1="52" y1="214.5" x2="708" y2="214.5" class="grid"/><text x="42.0" y="218.5" text-anchor="end" class="tick">750</text><text x="718.0" y="218.5" text-anchor="start" class="tick alt">25</text><line x1="52" y1="151.0" x2="708" y2="151.0" class="grid"/><text x="42.0" y="155.0" text-anchor="end" class="tick">1.500</text><text x="718.0" y="155.0" text-anchor="start" class="tick alt">50</text><line x1="52" y1="87.5" x2="708" y2="87.5" class="grid"/><text x="42.0" y="91.5" text-anchor="end" class="tick">2.250</text><text x="718.0" y="91.5" text-anchor="start" class="tick alt">75</text><line x1="52" y1="24.0" x2="708" y2="24.0" class="grid"/><text x="42.0" y="28.0" text-anchor="end" class="tick">3.000</text><text x="718.0" y="28.0" text-anchor="start" class="tick alt">100</text><rect x="79.3" y="80.9" width="54.7" height="197.1" rx="3" class="bar"/><text x="106.7" y="71.9" text-anchor="middle" class="val">2.328</text><text x="106.7" y="300.0" text-anchor="middle" class="tick">Mar</text><rect x="188.7" y="50.9" width="54.7" height="227.1" rx="3" class="bar"/><text x="216.0" y="41.9" text-anchor="middle" class="val">2.682</text><text x="216.0" y="300.0" text-anchor="middle" class="tick">Abr</text><rect x="298.0" y="107.3" width="54.7" height="170.7" rx="3" class="bar"/><text x="325.3" y="98.3" text-anchor="middle" class="val">2.016</text><text x="325.3" y="300.0" text-anchor="middle" class="tick">May</text><rect x="407.3" y="169.8" width="54.7" height="108.2" rx="3" class="bar"/><text x="434.7" y="160.8" text-anchor="middle" class="val">1.278</text><text x="434.7" y="300.0" text-anchor="middle" class="tick">Jun</text><rect x="516.7" y="157.1" width="54.7" height="120.9" rx="3" class="bar"/><text x="544.0" y="148.1" text-anchor="middle" class="val">1.428</text><text x="544.0" y="300.0" text-anchor="middle" class="tick">Jul</text><rect x="626.0" y="235.6" width="54.7" height="42.4" rx="3" class="bar partial"/><text x="653.3" y="226.6" text-anchor="middle" class="val">501</text><text x="653.3" y="300.0" text-anchor="middle" class="tick">Ago</text><polyline points="106.7,97.7 216.0,95.1 325.3,85.0 434.7,82.4 544.0,39.2 653.3,62.1" class="lineB"/><circle cx="106.7" cy="97.7" r="4.5" class="dotB"/><text x="106.7" y="84.7" text-anchor="middle" class="val alt halo">71</text><circle cx="216.0" cy="95.1" r="4.5" class="dotB"/><text x="216.0" y="82.1" text-anchor="middle" class="val alt halo">72</text><circle cx="325.3" cy="85.0" r="4.5" class="dotB"/><text x="325.3" y="72.0" text-anchor="middle" class="val alt halo">76</text><circle cx="434.7" cy="82.4" r="4.5" class="dotB"/><text x="434.7" y="69.4" text-anchor="middle" class="val alt halo">77</text><circle cx="544.0" cy="39.2" r="4.5" class="dotB"/><text x="544.0" y="26.2" text-anchor="middle" class="val alt halo">94</text><circle cx="653.3" cy="62.1" r="4.5" class="dotB"/><text x="653.3" y="49.1" text-anchor="middle" class="val alt halo">85</text><text x="742.0" y="18.0" text-anchor="middle" class="tick alt">locales</text><text x="46.0" y="18.0" text-anchor="middle" class="tick">unidades</text><text x="653" y="318" text-anchor="middle" class="tick warn">parcial</text></svg>
+<div class="legendline"><span><b>Pico</b> abril · 2.682 u.</span><span><b>Julio</b> 1.428 u. (+11,7% vs junio)</span><span><b>Acumulado</b> 10.233 u.</span></div>
+</div>
+</section>
 
-  <div class="filters-bar">
-    <input type="text" id="search" placeholder="Buscar dirección o barrio…">
-    <select id="fmtFilter"><option value="">Todos los formatos</option></select>
-    <select id="barrioFilter"><option value="">Todos los barrios</option></select>
-    <select id="qFilter">
-      <option value="">Todos</option>
-      <option value="0">Sin quiebres</option>
-      <option value="1">1–2 quiebres</option>
-      <option value="3">3+ quiebres</option>
-    </select>
-    <select id="prodFilter"><option value="">Todos los productos</option></select>
-    <span class="counter" id="counter"></span>
-  </div>
+<section>
+<div class="shead"><span class="num">02</span><div><h2>Progresión de presencia en tiendas</h2>
+<p>La distribución arrancó con 50 locales en la entrega sin cargo del 18/02. Pasaron 117 locales con venta en el período y 67 de ellos nunca estuvieron en esa entrega inicial: la cadena redistribuyó producto por su cuenta.</p></div></div>
+<div class="card"><h3>Altas y bajas de locales, mes a mes</h3><svg viewBox="0 0 760 300" class="chart"><line x1="52" y1="140.0" x2="740" y2="140.0" class="grid strong"/><rect x="72.0" y="126.8" width="46.8" height="13.2" rx="3" class="bar oliva"/><rect x="122.8" y="140.0" width="46.8" height="8.8" rx="3" class="bar paprika"/><text x="95.4" y="118.8" text-anchor="middle" class="val oliva-t">+3</text><text x="146.2" y="164.8" text-anchor="middle" class="val paprika-t">-2</text><text x="120.8" y="286.0" text-anchor="middle" class="tick">Abr</text><rect x="209.6" y="109.2" width="46.8" height="30.8" rx="3" class="bar oliva"/><rect x="260.4" y="140.0" width="46.8" height="13.2" rx="3" class="bar paprika"/><text x="233.0" y="101.2" text-anchor="middle" class="val oliva-t">+7</text><text x="283.8" y="169.2" text-anchor="middle" class="val paprika-t">-3</text><text x="258.4" y="286.0" text-anchor="middle" class="tick">May</text><rect x="347.2" y="109.2" width="46.8" height="30.8" rx="3" class="bar oliva"/><rect x="398.0" y="140.0" width="46.8" height="26.4" rx="3" class="bar paprika"/><text x="370.6" y="101.2" text-anchor="middle" class="val oliva-t">+7</text><text x="421.4" y="182.4" text-anchor="middle" class="val paprika-t">-6</text><text x="396.0" y="286.0" text-anchor="middle" class="tick">Jun</text><rect x="484.8" y="30.0" width="46.8" height="110.0" rx="3" class="bar oliva"/><rect x="535.6" y="140.0" width="46.8" height="35.2" rx="3" class="bar paprika"/><text x="508.2" y="22.0" text-anchor="middle" class="val oliva-t">+25</text><text x="559.0" y="191.2" text-anchor="middle" class="val paprika-t">-8</text><text x="533.6" y="286.0" text-anchor="middle" class="tick">Jul</text><rect x="622.4" y="104.8" width="46.8" height="35.2" rx="3" class="bar oliva"/><rect x="673.2" y="140.0" width="46.8" height="74.8" rx="3" class="bar paprika"/><text x="645.8" y="96.8" text-anchor="middle" class="val oliva-t">+8</text><text x="696.6" y="230.8" text-anchor="middle" class="val paprika-t">-17</text><text x="671.2" y="286.0" text-anchor="middle" class="tick">Ago</text><text x="52.0" y="22.0" text-anchor="start" class="tick oliva-t">altas de locales</text><text x="740.0" y="22.0" text-anchor="end" class="tick paprika-t">locales que dejan de vender</text></svg>
+<div class="legendline"><span><b>Julio</b> el mejor mes de altas: +25 locales nuevos</span><span><b>60 de 71</b> locales de marzo seguían vendiendo en julio</span><span><b>Agosto</b> −17 locales (mes parcial)</span></div></div>
+<div class="card" style="margin-top:18px"><h3>Productividad: unidades por local activo</h3><svg viewBox="0 0 760 270" class="chart"><line x1="52" y1="224.0" x2="740" y2="224.0" class="grid"/><text x="42.0" y="228.0" text-anchor="end" class="tick">0</text><line x1="52" y1="174.5" x2="740" y2="174.5" class="grid"/><text x="42.0" y="178.5" text-anchor="end" class="tick">10</text><line x1="52" y1="125.0" x2="740" y2="125.0" class="grid"/><text x="42.0" y="129.0" text-anchor="end" class="tick">20</text><line x1="52" y1="75.5" x2="740" y2="75.5" class="grid"/><text x="42.0" y="79.5" text-anchor="end" class="tick">30</text><line x1="52" y1="26.0" x2="740" y2="26.0" class="grid"/><text x="42.0" y="30.0" text-anchor="end" class="tick">40</text><path d="M 109.3,61.7 L 224.0,39.6 L 338.7,92.7 L 453.3,141.8 L 568.0,148.8 L 682.7,194.8 L 682.7,224 L 109.3,224 Z" class="area"/><polyline points="109.3,61.7 224.0,39.6 338.7,92.7 453.3,141.8 568.0,148.8 682.7,194.8" class="lineA"/><circle cx="109.3" cy="61.7" r="4.5" class="dotA"/><text x="109.3" y="49.7" text-anchor="middle" class="val">32,8</text><text x="109.3" y="246.0" text-anchor="middle" class="tick">Mar</text><circle cx="224.0" cy="39.6" r="4.5" class="dotA"/><text x="224.0" y="27.6" text-anchor="middle" class="val">37,2</text><text x="224.0" y="246.0" text-anchor="middle" class="tick">Abr</text><circle cx="338.7" cy="92.7" r="4.5" class="dotA"/><text x="338.7" y="80.7" text-anchor="middle" class="val">26,5</text><text x="338.7" y="246.0" text-anchor="middle" class="tick">May</text><circle cx="453.3" cy="141.8" r="4.5" class="dotA"/><text x="453.3" y="129.8" text-anchor="middle" class="val">16,6</text><text x="453.3" y="246.0" text-anchor="middle" class="tick">Jun</text><circle cx="568.0" cy="148.8" r="4.5" class="dotA"/><text x="568.0" y="136.8" text-anchor="middle" class="val">15,2</text><text x="568.0" y="246.0" text-anchor="middle" class="tick">Jul</text><circle cx="682.7" cy="194.8" r="4.5" class="dotA"/><text x="682.7" y="182.8" text-anchor="middle" class="val">5,9</text><text x="682.7" y="246.0" text-anchor="middle" class="tick">Ago</text></svg>
+<div class="legendline"><span><b>Abril</b> 37,2 u. por local</span><span><b>Julio</b> 15,2 u. por local (-59,2%)</span></div></div>
+</section>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-id" onclick="sortBy('id')">ID <span class="sort-arrow" id="s-id">↕</span></th>
-          <th class="col-dir" onclick="sortBy('dir')">Dirección <span class="sort-arrow" id="s-dir">↕</span></th>
-          <th class="col-bar" onclick="sortBy('barrio')">Barrio <span class="sort-arrow" id="s-barrio">↕</span></th>
-          <th class="col-fmt" onclick="sortBy('fmt')">Formato <span class="sort-arrow" id="s-fmt">↕</span></th>
-          <th class="col-vta" onclick="sortBy('vtas')" style="text-align:right">Ventas <span class="sort-arrow" id="s-vtas">↕</span></th>
-          <th class="col-q" onclick="sortBy('q')" style="text-align:center">Quiebres <span class="sort-arrow" id="s-q">↕</span></th>
-          <th class="col-prod">Productos sin stock</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="prod-legend" id="prodLegend"></div>
-  </div>
-</main>
+<section>
+<div class="shead"><span class="num">03</span><div><h2>Sell-in: qué compró la cadena</h2>
+<p>Tres entregas facturadas a Open 25. La primera es la inversión de lanzamiento bonificada al 100%; las siguientes son compras.</p></div></div>
+<div class="card"><svg viewBox="0 0 760 300" class="chart"><line x1="56" y1="236.0" x2="736" y2="236.0" class="grid"/><text x="46.0" y="240.0" text-anchor="end" class="tick">0</text><line x1="56" y1="185.5" x2="736" y2="185.5" class="grid"/><text x="46.0" y="189.5" text-anchor="end" class="tick">5.000</text><line x1="56" y1="135.0" x2="736" y2="135.0" class="grid"/><text x="46.0" y="139.0" text-anchor="end" class="tick">10.000</text><line x1="56" y1="84.5" x2="736" y2="84.5" class="grid"/><text x="46.0" y="88.5" text-anchor="end" class="tick">15.000</text><line x1="56" y1="34.0" x2="736" y2="34.0" class="grid"/><text x="46.0" y="38.0" text-anchor="end" class="tick">20.000</text><rect x="133.1" y="62.7" width="72.5" height="173.3" rx="4" fill="#9DB068" opacity=".88"/><text x="169.3" y="84.7" text-anchor="middle" class="inbar">17.160 u.</text><text x="169.3" y="258.0" text-anchor="middle" class="tick">20/02/2026</text><text x="169.3" y="276.0" text-anchor="middle" class="tick" fill="#9DB068">sin cargo</text><text x="169.3" y="292.0" text-anchor="middle" class="tick">FM3-00000034</text><rect x="359.7" y="202.1" width="72.5" height="33.9" rx="4" fill="#F2B33D" opacity=".88"/><text x="396.0" y="192.1" text-anchor="middle" class="val">3.360 u.</text><text x="396.0" y="258.0" text-anchor="middle" class="tick">17/06/2026</text><text x="396.0" y="276.0" text-anchor="middle" class="tick" fill="#F2B33D">bonif. 10%</text><text x="396.0" y="292.0" text-anchor="middle" class="tick">FM3-00000054</text><rect x="586.4" y="226.3" width="72.5" height="9.7" rx="4" fill="#E2603F" opacity=".88"/><text x="622.7" y="216.3" text-anchor="middle" class="val">960 u.</text><text x="622.7" y="258.0" text-anchor="middle" class="tick">15/08/2026</text><text x="622.7" y="276.0" text-anchor="middle" class="tick" fill="#E2603F">sin bonificación</text><text x="622.7" y="292.0" text-anchor="middle" class="tick">FA3-00000021</text><text x="56.0" y="20.0" text-anchor="start" class="tick">unidades por entrega</text></svg></div>
+<div class="card" style="margin-top:18px"><h3>Detalle por SKU y entrega</h3>
+<div class="scroll"><table><thead><tr><th>Producto</th><th class="num">Calibre</th><th class="num">Unidades</th><th class="num">Bultos</th></tr></thead><tbody><tr class="hd"><td colspan="4">FM3-00000034 · entrega 20/02/2026</td></tr><tr><td class="nm">Murken Rusticas Albahaca y Oliva 115GRX16</td><td class="num">115 g</td><td class="num">800</td><td class="num">50</td></tr><tr><td class="nm">Murken Crema Ciboulette 115GRX16</td><td class="num">115 g</td><td class="num">800</td><td class="num">50</td></tr><tr><td class="nm">Murken Jamón Serrano 115GRX16</td><td class="num">115 g</td><td class="num">800</td><td class="num">50</td></tr><tr><td class="nm">Murken Clásicas Corte Liso 80GRX16</td><td class="num">80 g</td><td class="num">1.600</td><td class="num">100</td></tr><tr><td class="nm">Murken Clásicas Corte Americano 80GRX16</td><td class="num">80 g</td><td class="num">1.280</td><td class="num">80</td></tr><tr><td class="nm">MURKEN CLÁSICAS CORTE LISO 36GRX60</td><td class="num">36 g</td><td class="num">6.600</td><td class="num">110</td></tr><tr><td class="nm">MURKEN CLÁSICAS CORTE AMERICANO 36GRX60</td><td class="num">36 g</td><td class="num">5.280</td><td class="num">88</td></tr><tr class="hd"><td colspan="4">FM3-00000054 · entrega 17/06/2026</td></tr><tr><td class="nm">Murken Rusticas Albahaca y Oliva 115GRX16</td><td class="num">115 g</td><td class="num">480</td><td class="num">30</td></tr><tr><td class="nm">Murken Crema Ciboulette 115GRX16</td><td class="num">115 g</td><td class="num">480</td><td class="num">30</td></tr><tr><td class="nm">Murken Jamón Serrano 115GRX16</td><td class="num">115 g</td><td class="num">480</td><td class="num">30</td></tr><tr><td class="nm">Murken Clásicas Corte Liso 80GRX16</td><td class="num">80 g</td><td class="num">960</td><td class="num">60</td></tr><tr><td class="nm">Murken Clásicas Corte Americano 80GRX16</td><td class="num">80 g</td><td class="num">960</td><td class="num">60</td></tr><tr class="hd"><td colspan="4">FA3-00000021 · entrega 15/08/2026</td></tr><tr><td class="nm">Murken Crema Ciboulette 115GRX16</td><td class="num">115 g</td><td class="num">480</td><td class="num">30</td></tr><tr><td class="nm">Murken Jamón Serrano 115GRX16</td><td class="num">115 g</td><td class="num">480</td><td class="num">30</td></tr></tbody></table></div>
+<p class="note">La reposición de junio fue solo de 115 g y 80 g; la de agosto, solo de dos sabores de 115 g. El 36 g no se recompró en todo el período.</p></div>
+</section>
 
+<section>
+<div class="shead"><span class="num">04</span><div><h2>Sell-in contra sell-out</h2>
+<p>Unidades acumuladas compradas por la cadena (área punteada) contra unidades acumuladas vendidas al consumidor (línea). La distancia entre ambas es el stock en poder de Open 25.</p></div></div>
+<div class="grid3">
+<div class="card"><svg viewBox="0 0 380 250" class="chart"><line x1="44" y1="208.0" x2="366" y2="208.0" class="grid"/><text x="36.0" y="212.0" text-anchor="end" class="tick">0</text><line x1="44" y1="162.5" x2="366" y2="162.5" class="grid"/><text x="36.0" y="166.5" text-anchor="end" class="tick">1.250</text><line x1="44" y1="117.0" x2="366" y2="117.0" class="grid"/><text x="36.0" y="121.0" text-anchor="end" class="tick">2.500</text><line x1="44" y1="71.5" x2="366" y2="71.5" class="grid"/><text x="36.0" y="75.5" text-anchor="end" class="tick">3.750</text><line x1="44" y1="26.0" x2="366" y2="26.0" class="grid"/><text x="36.0" y="30.0" text-anchor="end" class="tick">5.000</text><path d="M 44,208 L 44.0,120.6 L 108.4,120.6 L 108.4,120.6 L 172.8,120.6 L 172.8,120.6 L 237.2,120.6 L 237.2,68.2 L 301.6,68.2 L 301.6,68.2 L 366.0,68.2 L 366.0,33.3 L 366.0,208 Z" fill="#A79B87" opacity=".13"/><polyline points="44.0,120.6 108.4,120.6 108.4,120.6 172.8,120.6 172.8,120.6 237.2,120.6 237.2,68.2 301.6,68.2 301.6,68.2 366.0,68.2 366.0,33.3" fill="none" stroke="#A79B87" stroke-width="2" stroke-dasharray="5 3"/><polyline points="44.0,181.7 108.4,155.5 172.8,141.5 237.2,135.4 301.6,124.0 366.0,118.6" fill="none" stroke="#E2603F" stroke-width="2.6" stroke-linejoin="round"/><circle cx="44.0" cy="181.7" r="3.2" fill="#E2603F"/><circle cx="108.4" cy="155.5" r="3.2" fill="#E2603F"/><circle cx="172.8" cy="141.5" r="3.2" fill="#E2603F"/><circle cx="237.2" cy="135.4" r="3.2" fill="#E2603F"/><circle cx="301.6" cy="124.0" r="3.2" fill="#E2603F"/><circle cx="366.0" cy="118.6" r="3.2" fill="#E2603F"/><text x="44.0" y="228.0" text-anchor="middle" class="tick">Mar</text><text x="108.4" y="228.0" text-anchor="middle" class="tick">Abr</text><text x="172.8" y="228.0" text-anchor="middle" class="tick">May</text><text x="237.2" y="228.0" text-anchor="middle" class="tick">Jun</text><text x="301.6" y="228.0" text-anchor="middle" class="tick">Jul</text><text x="366.0" y="228.0" text-anchor="middle" class="tick">Ago</text><text x="48" y="18" fill="#E2603F" class="serie">115 g</text><text x="366" y="18" text-anchor="end" class="serie" fill="#A79B87">vendido 51,1% del sell-in</text></svg></div>
+<div class="card"><svg viewBox="0 0 380 250" class="chart"><line x1="44" y1="208.0" x2="366" y2="208.0" class="grid"/><text x="36.0" y="212.0" text-anchor="end" class="tick">0</text><line x1="44" y1="162.5" x2="366" y2="162.5" class="grid"/><text x="36.0" y="166.5" text-anchor="end" class="tick">1.250</text><line x1="44" y1="117.0" x2="366" y2="117.0" class="grid"/><text x="36.0" y="121.0" text-anchor="end" class="tick">2.500</text><line x1="44" y1="71.5" x2="366" y2="71.5" class="grid"/><text x="36.0" y="75.5" text-anchor="end" class="tick">3.750</text><line x1="44" y1="26.0" x2="366" y2="26.0" class="grid"/><text x="36.0" y="30.0" text-anchor="end" class="tick">5.000</text><path d="M 44,208 L 44.0,103.2 L 108.4,103.2 L 108.4,103.2 L 172.8,103.2 L 172.8,103.2 L 237.2,103.2 L 237.2,33.3 L 301.6,33.3 L 301.6,33.3 L 366.0,33.3 L 366.0,33.3 L 366.0,208 Z" fill="#A79B87" opacity=".13"/><polyline points="44.0,103.2 108.4,103.2 108.4,103.2 172.8,103.2 172.8,103.2 237.2,103.2 237.2,33.3 301.6,33.3 301.6,33.3 366.0,33.3 366.0,33.3" fill="none" stroke="#A79B87" stroke-width="2" stroke-dasharray="5 3"/><polyline points="44.0,176.7 108.4,149.4 172.8,128.3 237.2,118.6 301.6,106.2 366.0,101.8" fill="none" stroke="#F2B33D" stroke-width="2.6" stroke-linejoin="round"/><circle cx="44.0" cy="176.7" r="3.2" fill="#F2B33D"/><circle cx="108.4" cy="149.4" r="3.2" fill="#F2B33D"/><circle cx="172.8" cy="128.3" r="3.2" fill="#F2B33D"/><circle cx="237.2" cy="118.6" r="3.2" fill="#F2B33D"/><circle cx="301.6" cy="106.2" r="3.2" fill="#F2B33D"/><circle cx="366.0" cy="101.8" r="3.2" fill="#F2B33D"/><text x="44.0" y="228.0" text-anchor="middle" class="tick">Mar</text><text x="108.4" y="228.0" text-anchor="middle" class="tick">Abr</text><text x="172.8" y="228.0" text-anchor="middle" class="tick">May</text><text x="237.2" y="228.0" text-anchor="middle" class="tick">Jun</text><text x="301.6" y="228.0" text-anchor="middle" class="tick">Jul</text><text x="366.0" y="228.0" text-anchor="middle" class="tick">Ago</text><text x="48" y="18" fill="#F2B33D" class="serie">80 g</text><text x="366" y="18" text-anchor="end" class="serie" fill="#A79B87">vendido 60,8% del sell-in</text></svg></div>
+<div class="card"><svg viewBox="0 0 380 250" class="chart"><line x1="44" y1="208.0" x2="366" y2="208.0" class="grid"/><text x="36.0" y="212.0" text-anchor="end" class="tick">0</text><line x1="44" y1="162.5" x2="366" y2="162.5" class="grid"/><text x="36.0" y="166.5" text-anchor="end" class="tick">3.000</text><line x1="44" y1="117.0" x2="366" y2="117.0" class="grid"/><text x="36.0" y="121.0" text-anchor="end" class="tick">6.000</text><line x1="44" y1="71.5" x2="366" y2="71.5" class="grid"/><text x="36.0" y="75.5" text-anchor="end" class="tick">9.000</text><line x1="44" y1="26.0" x2="366" y2="26.0" class="grid"/><text x="36.0" y="30.0" text-anchor="end" class="tick">12.000</text><path d="M 44,208 L 44.0,27.8 L 108.4,27.8 L 108.4,27.8 L 172.8,27.8 L 172.8,27.8 L 237.2,27.8 L 237.2,27.8 L 301.6,27.8 L 301.6,27.8 L 366.0,27.8 L 366.0,27.8 L 366.0,208 Z" fill="#A79B87" opacity=".13"/><polyline points="44.0,27.8 108.4,27.8 108.4,27.8 172.8,27.8 172.8,27.8 237.2,27.8 237.2,27.8 301.6,27.8 301.6,27.8 366.0,27.8 366.0,27.8" fill="none" stroke="#A79B87" stroke-width="2" stroke-dasharray="5 3"/><polyline points="44.0,196.7 108.4,178.3 172.8,162.4 237.2,149.6 301.6,137.8 366.0,134.3" fill="none" stroke="#6FA0C4" stroke-width="2.6" stroke-linejoin="round"/><circle cx="44.0" cy="196.7" r="3.2" fill="#6FA0C4"/><circle cx="108.4" cy="178.3" r="3.2" fill="#6FA0C4"/><circle cx="172.8" cy="162.4" r="3.2" fill="#6FA0C4"/><circle cx="237.2" cy="149.6" r="3.2" fill="#6FA0C4"/><circle cx="301.6" cy="137.8" r="3.2" fill="#6FA0C4"/><circle cx="366.0" cy="134.3" r="3.2" fill="#6FA0C4"/><text x="44.0" y="228.0" text-anchor="middle" class="tick">Mar</text><text x="108.4" y="228.0" text-anchor="middle" class="tick">Abr</text><text x="172.8" y="228.0" text-anchor="middle" class="tick">May</text><text x="237.2" y="228.0" text-anchor="middle" class="tick">Jun</text><text x="301.6" y="228.0" text-anchor="middle" class="tick">Jul</text><text x="366.0" y="228.0" text-anchor="middle" class="tick">Ago</text><text x="48" y="18" fill="#6FA0C4" class="serie">36 g</text><text x="366" y="18" text-anchor="end" class="serie" fill="#A79B87">vendido 40,9% del sell-in</text></svg></div>
+</div>
+<div class="card" style="margin-top:18px"><h3>Porcentaje del sell-in acumulado ya vendido</h3><svg viewBox="0 0 760 320" class="chart"><line x1="54" y1="272.0" x2="630" y2="272.0" class="grid"/><text x="44.0" y="276.0" text-anchor="end" class="tick">0%</text><line x1="54" y1="227.3" x2="630" y2="227.3" class="grid"/><text x="44.0" y="231.3" text-anchor="end" class="tick">20%</text><line x1="54" y1="182.5" x2="630" y2="182.5" class="grid"/><text x="44.0" y="186.5" text-anchor="end" class="tick">40%</text><line x1="54" y1="137.8" x2="630" y2="137.8" class="grid"/><text x="44.0" y="141.8" text-anchor="end" class="tick">60%</text><line x1="54" y1="93.1" x2="630" y2="93.1" class="grid"/><text x="44.0" y="97.1" text-anchor="end" class="tick">80%</text><line x1="54" y1="48.4" x2="630" y2="48.4" class="grid"/><text x="44.0" y="52.4" text-anchor="end" class="tick">100%</text><line x1="54" y1="48.4" x2="630" y2="48.4" class="grid quiebre"/><text x="626.0" y="40.4" text-anchor="end" class="tick warn">sin stock remanente</text><text x="54.0" y="296.0" text-anchor="middle" class="tick">Mar</text><text x="169.2" y="296.0" text-anchor="middle" class="tick">Abr</text><text x="284.4" y="296.0" text-anchor="middle" class="tick">May</text><text x="399.6" y="296.0" text-anchor="middle" class="tick">Jun</text><text x="514.8" y="296.0" text-anchor="middle" class="tick">Jul</text><text x="630.0" y="296.0" text-anchor="middle" class="tick">Ago</text><polyline points="54.0,258.0 169.2,235.1 284.4,215.4 399.6,199.5 514.8,184.9 630.0,180.5" fill="none" stroke="#6FA0C4" stroke-width="2.5" stroke-linejoin="round"/><circle cx="54.0" cy="258.0" r="3.6" fill="#6FA0C4"/><circle cx="169.2" cy="235.1" r="3.6" fill="#6FA0C4"/><circle cx="284.4" cy="215.4" r="3.6" fill="#6FA0C4"/><circle cx="399.6" cy="199.5" r="3.6" fill="#6FA0C4"/><circle cx="514.8" cy="184.9" r="3.6" fill="#6FA0C4"/><circle cx="630.0" cy="180.5" r="3.6" fill="#6FA0C4"/><polyline points="54.0,205.1 169.2,146.9 284.4,101.9 399.6,157.5 514.8,141.7 630.0,136.0" fill="none" stroke="#F2B33D" stroke-width="2.5" stroke-linejoin="round"/><circle cx="54.0" cy="205.1" r="3.6" fill="#F2B33D"/><circle cx="169.2" cy="146.9" r="3.6" fill="#F2B33D"/><circle cx="284.4" cy="101.9" r="3.6" fill="#F2B33D"/><circle cx="399.6" cy="157.5" r="3.6" fill="#F2B33D"/><circle cx="514.8" cy="141.7" r="3.6" fill="#F2B33D"/><circle cx="630.0" cy="136.0" r="3.6" fill="#F2B33D"/><polyline points="54.0,204.6 169.2,137.7 284.4,101.8 399.6,155.8 514.8,137.6 630.0,157.6" fill="none" stroke="#E2603F" stroke-width="2.5" stroke-linejoin="round"/><circle cx="54.0" cy="204.6" r="3.6" fill="#E2603F"/><circle cx="169.2" cy="137.7" r="3.6" fill="#E2603F"/><circle cx="284.4" cy="101.8" r="3.6" fill="#E2603F"/><circle cx="399.6" cy="155.8" r="3.6" fill="#E2603F"/><circle cx="514.8" cy="137.6" r="3.6" fill="#E2603F"/><circle cx="630.0" cy="157.6" r="3.6" fill="#E2603F"/><rect x="650" y="38" width="11" height="11" rx="2" fill="#F2B33D"/><text x="668" y="48" fill="#F2B33D" class="serie">80 g · 60,8%</text><rect x="650" y="64" width="11" height="11" rx="2" fill="#E2603F"/><text x="668" y="74" fill="#E2603F" class="serie">115 g · 51,1%</text><rect x="650" y="90" width="11" height="11" rx="2" fill="#6FA0C4"/><text x="668" y="100" fill="#6FA0C4" class="serie">36 g · 40,9%</text></svg>
+<div class="legendline"><span>Los saltos hacia abajo en 115 g y 80 g son las reposiciones de junio y agosto entrando al denominador.</span></div></div>
+<div class="card" style="margin-top:18px"><h3>Balance de unidades por calibre</h3>
+<table><thead><tr><th>Calibre</th><th class="num">Sell-in</th><th class="num">Sell-out</th><th class="num">Stock teórico</th><th class="num">% vendido</th></tr></thead>
+<tbody><tr><td class="nm"><i style="background:#6FA0C4"></i>36 g</td><td class="num">11.880</td><td class="num">4.860</td><td class="num strong">7.020</td><td class="num">40,9%</td></tr><tr><td class="nm"><i style="background:#F2B33D"></i>80 g</td><td class="num">4.800</td><td class="num">2.918</td><td class="num strong">1.882</td><td class="num">60,8%</td></tr><tr><td class="nm"><i style="background:#E2603F"></i>115 g</td><td class="num">4.800</td><td class="num">2.455</td><td class="num strong">2.345</td><td class="num">51,1%</td></tr><tr class="tot"><td class="nm">Total</td><td class="num">21.480</td><td class="num">10.233</td><td class="num strong">11.247</td><td class="num">47,6%</td></tr></tbody></table>
+<p class="note">Stock teórico = sell-in − sell-out. Incluye lo que está en el CD de Open 25 y en góndola, y no descuenta mermas, vencimientos ni ajustes de inventario de la cadena.</p></div>
+</section>
+
+<section>
+<div class="shead"><span class="num">05</span><div><h2>Sell-out por SKU</h2>
+<p>Unidades mes a mes, conversión a cajas y kilos, cobertura de locales y porcentaje vendido sobre el sell-in de cada SKU.</p></div></div>
+<div class="card"><div class="scroll"><table>
+<thead><tr><th>SKU</th><th class="num">Mar</th><th class="num">Abr</th><th class="num">May</th><th class="num">Jun</th><th class="num">Jul</th><th class="num">Ago</th><th class="num">Total u.</th><th class="num">Cajas</th><th class="num">Kg</th><th class="num">Locales</th><th class="num">% sell-in</th><th>Curva</th></tr></thead>
+<tbody><tr><td class="nm"><i style="background:#6FA0C4"></i>Clásicas 36g</td><td class="num">353</td><td class="num">562</td><td class="num">445</td><td class="num">312</td><td class="num">227</td><td class="num">133</td><td class="num strong">2.032</td><td class="num">33,9</td><td class="num">73,2</td><td class="num">68</td><td class="num"><span class="pill g">30,8%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,9.3 18.0,1.5 36.0,5.9 54.0,10.8 72.0,14.0 90.0,17.5" fill="none" stroke="#6FA0C4" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="17.5" r="2.4" fill="#6FA0C4"/></svg></td></tr><tr><td class="nm"><i style="background:#6FA0C4"></i>Americano 36g</td><td class="num">391</td><td class="num">652</td><td class="num">420</td><td class="num">243</td><td class="num">207</td><td class="num">99</td><td class="num strong">2.012</td><td class="num">33,5</td><td class="num">72,4</td><td class="num">65</td><td class="num"><span class="pill g">38,1%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,9.9 18.0,1.5 36.0,9.0 54.0,14.7 72.0,15.8 90.0,19.3" fill="none" stroke="#6FA0C4" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="19.3" r="2.4" fill="#6FA0C4"/></svg></td></tr><tr><td class="nm"><i style="background:#F2B33D"></i>Clásicas 80g</td><td class="num">451</td><td class="num">395</td><td class="num">319</td><td class="num">166</td><td class="num">214</td><td class="num">80</td><td class="num strong">1.625</td><td class="num">101,6</td><td class="num">130,0</td><td class="num">90</td><td class="num"><span class="pill g">63,5%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,1.5 18.0,4.1 36.0,7.6 54.0,14.8 72.0,12.5 90.0,18.8" fill="none" stroke="#F2B33D" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="18.8" r="2.4" fill="#F2B33D"/></svg></td></tr><tr><td class="nm"><i style="background:#F2B33D"></i>Americano 80g</td><td class="num">410</td><td class="num">355</td><td class="num">260</td><td class="num">101</td><td class="num">125</td><td class="num">42</td><td class="num strong">1.293</td><td class="num">80,8</td><td class="num">103,4</td><td class="num">69</td><td class="num"><span class="pill g">57,7%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,1.5 18.0,4.3 36.0,9.2 54.0,17.3 72.0,16.1 90.0,20.3" fill="none" stroke="#F2B33D" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="20.3" r="2.4" fill="#F2B33D"/></svg></td></tr><tr><td class="nm"><i style="background:#E2603F"></i>Jamón Serrano 115g</td><td class="num">232</td><td class="num">263</td><td class="num">136</td><td class="num">53</td><td class="num">121</td><td class="num">46</td><td class="num strong">851</td><td class="num">53,2</td><td class="num">97,9</td><td class="num">73</td><td class="num"><span class="pill g">48,4%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,4.0 18.0,1.5 36.0,11.6 54.0,18.3 72.0,12.8 90.0,18.8" fill="none" stroke="#E2603F" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="18.8" r="2.4" fill="#E2603F"/></svg></td></tr><tr><td class="nm"><i style="background:#E2603F"></i>Crema y Ciboulette 115g</td><td class="num">264</td><td class="num">246</td><td class="num">121</td><td class="num">42</td><td class="num">115</td><td class="num">61</td><td class="num strong">849</td><td class="num">53,1</td><td class="num">97,6</td><td class="num">74</td><td class="num"><span class="pill g">48,2%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,1.5 18.0,2.9 36.0,12.9 54.0,19.2 72.0,13.4 90.0,17.6" fill="none" stroke="#E2603F" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="17.6" r="2.4" fill="#E2603F"/></svg></td></tr><tr><td class="nm"><i style="background:#9DB068"></i>Promo 36g 2x</td><td class="num">—</td><td class="num">—</td><td class="num">186</td><td class="num">288</td><td class="num">342</td><td class="num">—</td><td class="num strong">816</td><td class="num">13,6</td><td class="num">29,4</td><td class="num">61</td><td class="num"><span class="pill n">promo</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,22.5 18.0,22.5 36.0,11.1 54.0,4.8 72.0,1.5 90.0,22.5" fill="none" stroke="#9DB068" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="22.5" r="2.4" fill="#9DB068"/></svg></td></tr><tr><td class="nm"><i style="background:#E2603F"></i>Rústicas Albahaca 115g</td><td class="num">227</td><td class="num">209</td><td class="num">129</td><td class="num">73</td><td class="num">77</td><td class="num">40</td><td class="num strong">755</td><td class="num">47,2</td><td class="num">86,8</td><td class="num">66</td><td class="num"><span class="pill g">59,0%</span></td><td><svg viewBox="0 0 90 24" class="spark"><polyline points="0.0,1.5 18.0,3.2 36.0,10.6 54.0,15.7 72.0,15.4 90.0,18.8" fill="none" stroke="#E2603F" stroke-width="1.8" stroke-linejoin="round"/><circle cx="90.0" cy="18.8" r="2.4" fill="#E2603F"/></svg></td></tr></tbody></table></div>
+<p class="note">Cajas calculadas con las unidades por bulto de origen: 16 u. para 115 g y 80 g, 66 u. para 36 g. La promo «2 x DIN» se cuenta como una unidad de venta, tal como la registra el POS de Open 25; si cada operación mueve dos paquetes, el volumen físico del 36 g es hasta 816 unidades mayor.</p></div>
+</section>
+
+<section>
+<div class="shead"><span class="num">06</span><div><h2>Venta en cajas por producto</h2>
+<p>Total del período, equivalente a bultos de origen. Sirve para dimensionar la reposición.</p></div></div>
+<div class="card"><svg viewBox="0 0 760 334" class="chart"><text x="198" y="33" text-anchor="end" class="lab">Clásicas 80g</text><rect x="210" y="18" width="460.0" height="20" rx="3" fill="#F2B33D" opacity=".85"/><text x="680.0" y="33" class="val">101,6</text><text x="722.0" y="33" class="tick">cajas</text><text x="198" y="71" text-anchor="end" class="lab">Americano 80g</text><rect x="210" y="56" width="365.8" height="20" rx="3" fill="#F2B33D" opacity=".85"/><text x="585.8" y="71" class="val">80,8</text><text x="627.8" y="71" class="tick">cajas</text><text x="198" y="109" text-anchor="end" class="lab">Jamón Serrano 115g</text><rect x="210" y="94" width="240.9" height="20" rx="3" fill="#E2603F" opacity=".85"/><text x="460.9" y="109" class="val">53,2</text><text x="502.9" y="109" class="tick">cajas</text><text x="198" y="147" text-anchor="end" class="lab">Crema y Ciboulette 115g</text><rect x="210" y="132" width="240.4" height="20" rx="3" fill="#E2603F" opacity=".85"/><text x="460.4" y="147" class="val">53,1</text><text x="502.4" y="147" class="tick">cajas</text><text x="198" y="185" text-anchor="end" class="lab">Rústicas Albahaca 115g</text><rect x="210" y="170" width="213.7" height="20" rx="3" fill="#E2603F" opacity=".85"/><text x="433.7" y="185" class="val">47,2</text><text x="475.7" y="185" class="tick">cajas</text><text x="198" y="223" text-anchor="end" class="lab">Clásicas 36g</text><rect x="210" y="208" width="153.5" height="20" rx="3" fill="#6FA0C4" opacity=".85"/><text x="373.5" y="223" class="val">33,9</text><text x="415.5" y="223" class="tick">cajas</text><text x="198" y="261" text-anchor="end" class="lab">Americano 36g</text><rect x="210" y="246" width="151.7" height="20" rx="3" fill="#6FA0C4" opacity=".85"/><text x="371.7" y="261" class="val">33,5</text><text x="413.7" y="261" class="tick">cajas</text><text x="198" y="299" text-anchor="end" class="lab">Promo 36g 2x</text><rect x="210" y="284" width="61.6" height="20" rx="3" fill="#9DB068" opacity=".85"/><text x="281.6" y="299" class="val">13,6</text><text x="323.6" y="299" class="tick">cajas</text></svg>
+<div class="legendline"><span><b>Total</b> 416,9 cajas en 6 meses · ~83,4 cajas/mes de rotación real</span></div></div>
+</section>
+
+<section>
+<div class="shead"><span class="num">07</span><div><h2>Mix por calibre</h2>
+<p>Participación de cada gramaje en el sell-out mensual y cantidad de locales que venden cada SKU.</p></div></div>
+<div class="grid2">
+<div class="card"><h3>Participación mensual por gramaje</h3><svg viewBox="0 0 760 300" class="chart"><rect x="66.2" y="179.2" width="56.6" height="74.8" fill="#6FA0C4" opacity=".88"/><text x="94.5" y="220.6" text-anchor="middle" class="inbar">32%</text><rect x="66.2" y="92.7" width="56.6" height="86.5" fill="#F2B33D" opacity=".88"/><text x="94.5" y="139.9" text-anchor="middle" class="inbar">37%</text><rect x="66.2" y="20.0" width="56.6" height="72.7" fill="#E2603F" opacity=".88"/><text x="94.5" y="60.3" text-anchor="middle" class="inbar">31%</text><text x="94.5" y="276.0" text-anchor="middle" class="tick">Mar</text><rect x="167.2" y="148.1" width="56.6" height="105.9" fill="#6FA0C4" opacity=".88"/><text x="195.5" y="205.0" text-anchor="middle" class="inbar">45%</text><rect x="167.2" y="82.6" width="56.6" height="65.4" fill="#F2B33D" opacity=".88"/><text x="195.5" y="119.4" text-anchor="middle" class="inbar">28%</text><rect x="167.2" y="20.0" width="56.6" height="62.6" fill="#E2603F" opacity=".88"/><text x="195.5" y="55.3" text-anchor="middle" class="inbar">27%</text><text x="195.5" y="276.0" text-anchor="middle" class="tick">Abr</text><rect x="268.2" y="132.0" width="56.6" height="122.0" fill="#6FA0C4" opacity=".88"/><text x="296.5" y="197.0" text-anchor="middle" class="inbar">52%</text><rect x="268.2" y="64.8" width="56.6" height="67.2" fill="#F2B33D" opacity=".88"/><text x="296.5" y="102.4" text-anchor="middle" class="inbar">29%</text><rect x="268.2" y="20.0" width="56.6" height="44.8" fill="#E2603F" opacity=".88"/><text x="296.5" y="46.4" text-anchor="middle" class="inbar">19%</text><text x="296.5" y="276.0" text-anchor="middle" class="tick">May</text><rect x="369.2" y="99.6" width="56.6" height="154.4" fill="#6FA0C4" opacity=".88"/><text x="397.5" y="180.8" text-anchor="middle" class="inbar">66%</text><rect x="369.2" y="50.8" width="56.6" height="48.9" fill="#F2B33D" opacity=".88"/><text x="397.5" y="79.2" text-anchor="middle" class="inbar">21%</text><rect x="369.2" y="20.0" width="56.6" height="30.8" fill="#E2603F" opacity=".88"/><text x="397.5" y="39.4" text-anchor="middle" class="inbar">13%</text><text x="397.5" y="276.0" text-anchor="middle" class="tick">Jun</text><rect x="470.2" y="126.8" width="56.6" height="127.2" fill="#6FA0C4" opacity=".88"/><text x="498.5" y="194.4" text-anchor="middle" class="inbar">54%</text><rect x="470.2" y="71.3" width="56.6" height="55.6" fill="#F2B33D" opacity=".88"/><text x="498.5" y="103.1" text-anchor="middle" class="inbar">24%</text><rect x="470.2" y="20.0" width="56.6" height="51.3" fill="#E2603F" opacity=".88"/><text x="498.5" y="49.6" text-anchor="middle" class="inbar">22%</text><text x="498.5" y="276.0" text-anchor="middle" class="tick">Jul</text><rect x="571.2" y="145.6" width="56.6" height="108.4" fill="#6FA0C4" opacity=".88"/><text x="599.5" y="203.8" text-anchor="middle" class="inbar">46%</text><rect x="571.2" y="88.7" width="56.6" height="57.0" fill="#F2B33D" opacity=".88"/><text x="599.5" y="121.1" text-anchor="middle" class="inbar">24%</text><rect x="571.2" y="20.0" width="56.6" height="68.7" fill="#E2603F" opacity=".88"/><text x="599.5" y="58.3" text-anchor="middle" class="inbar">29%</text><text x="599.5" y="276.0" text-anchor="middle" class="tick">Ago</text><rect x="668" y="28" width="11" height="11" rx="2" fill="#6FA0C4"/><text x="686" y="38" class="serie">36 g</text><rect x="668" y="50" width="11" height="11" rx="2" fill="#F2B33D"/><text x="686" y="60" class="serie">80 g</text><rect x="668" y="72" width="11" height="11" rx="2" fill="#E2603F"/><text x="686" y="82" class="serie">115 g</text></svg></div>
+<div class="card"><h3>Cobertura: locales que venden cada SKU</h3>
+<div class="scroll"><table><thead><tr><th>SKU</th><th class="num">Mar</th><th class="num">Abr</th><th class="num">May</th><th class="num">Jun</th><th class="num">Jul</th><th class="num">Ago</th></tr></thead><tbody><tr><td class="nm">Clásicas 36g</td><td class="num">55</td><td class="num">57</td><td class="num">59</td><td class="num">57</td><td class="num">49</td><td class="num">43</td></tr><tr><td class="nm">Americano 36g</td><td class="num">51</td><td class="num">56</td><td class="num">54</td><td class="num">55</td><td class="num">50</td><td class="num">37</td></tr><tr><td class="nm">Clásicas 80g</td><td class="num">55</td><td class="num">54</td><td class="num">52</td><td class="num">41</td><td class="num">48</td><td class="num">34</td></tr><tr><td class="nm">Americano 80g</td><td class="num">53</td><td class="num">52</td><td class="num">44</td><td class="num">30</td><td class="num">31</td><td class="num">16</td></tr><tr><td class="nm">Rústicas Albahaca 115g</td><td class="num">49</td><td class="num">47</td><td class="num">40</td><td class="num">28</td><td class="num">22</td><td class="num">18</td></tr><tr><td class="nm">Jamón Serrano 115g</td><td class="num">45</td><td class="num">50</td><td class="num">41</td><td class="num">20</td><td class="num">31</td><td class="num">16</td></tr><tr><td class="nm">Crema y Ciboulette 115g</td><td class="num">50</td><td class="num">50</td><td class="num">34</td><td class="num">18</td><td class="num">27</td><td class="num">23</td></tr><tr><td class="nm">Promo 36g 2x</td><td class="num">—</td><td class="num">—</td><td class="num">45</td><td class="num">56</td><td class="num">45</td><td class="num">—</td></tr></tbody></table></div>
+<p class="note">Cantidad de locales con al menos una unidad vendida del SKU en el mes.</p></div>
+</div>
+</section>
+
+<section>
+<div class="shead"><span class="num">08</span><div><h2>Efecto de la promo 2 x en 36 g</h2>
+<p>La promo se registra desde mayo hasta julio, sin movimiento en agosto.</p></div></div>
+<div class="card"><svg viewBox="0 0 760 300" class="chart"><line x1="52" y1="254.0" x2="640" y2="254.0" class="grid"/><text x="42.0" y="258.0" text-anchor="end" class="tick">0</text><line x1="52" y1="196.5" x2="640" y2="196.5" class="grid"/><text x="42.0" y="200.5" text-anchor="end" class="tick">375</text><line x1="52" y1="139.0" x2="640" y2="139.0" class="grid"/><text x="42.0" y="143.0" text-anchor="end" class="tick">750</text><line x1="52" y1="81.5" x2="640" y2="81.5" class="grid"/><text x="42.0" y="85.5" text-anchor="end" class="tick">1.125</text><line x1="52" y1="24.0" x2="640" y2="24.0" class="grid"/><text x="42.0" y="28.0" text-anchor="end" class="tick">1.500</text><rect x="76.5" y="139.9" width="49.0" height="114.1" rx="2" fill="#6FA0C4" opacity=".85"/><text x="101.0" y="130.9" text-anchor="middle" class="val">744</text><text x="101.0" y="276.0" text-anchor="middle" class="tick">Mar</text><rect x="174.5" y="67.9" width="49.0" height="186.1" rx="2" fill="#6FA0C4" opacity=".85"/><text x="199.0" y="58.9" text-anchor="middle" class="val">1.214</text><text x="199.0" y="276.0" text-anchor="middle" class="tick">Abr</text><rect x="272.5" y="121.4" width="49.0" height="132.6" rx="2" fill="#6FA0C4" opacity=".85"/><rect x="272.5" y="92.8" width="49.0" height="28.5" rx="2" fill="#9DB068" opacity=".9"/><text x="297.0" y="111.1" text-anchor="middle" class="inbar">186</text><text x="297.0" y="83.8" text-anchor="middle" class="val">1.051</text><text x="297.0" y="276.0" text-anchor="middle" class="tick">May</text><rect x="370.5" y="168.9" width="49.0" height="85.1" rx="2" fill="#6FA0C4" opacity=".85"/><rect x="370.5" y="124.7" width="49.0" height="44.2" rx="2" fill="#9DB068" opacity=".9"/><text x="395.0" y="150.8" text-anchor="middle" class="inbar">288</text><text x="395.0" y="115.7" text-anchor="middle" class="val">843</text><text x="395.0" y="276.0" text-anchor="middle" class="tick">Jun</text><rect x="468.5" y="187.5" width="49.0" height="66.5" rx="2" fill="#6FA0C4" opacity=".85"/><rect x="468.5" y="135.0" width="49.0" height="52.4" rx="2" fill="#9DB068" opacity=".9"/><text x="493.0" y="165.2" text-anchor="middle" class="inbar">342</text><text x="493.0" y="126.0" text-anchor="middle" class="val">776</text><text x="493.0" y="276.0" text-anchor="middle" class="tick">Jul</text><rect x="566.5" y="218.4" width="49.0" height="35.6" rx="2" fill="#6FA0C4" opacity=".85"/><text x="591.0" y="209.4" text-anchor="middle" class="val">232</text><text x="591.0" y="276.0" text-anchor="middle" class="tick">Ago</text><rect x="658" y="34" width="11" height="11" rx="2" fill="#6FA0C4"/><text x="676" y="44" class="serie">unidad suelta 36 g</text><rect x="658" y="56" width="11" height="11" rx="2" fill="#9DB068"/><text x="676" y="66" class="serie">promo 2 x 36 g</text></svg>
+<div class="legendline"><span><b>Julio</b> la promo explica el 44,1% de las unidades de 36 g</span><span>Presente en 56 locales en su pico (junio)</span><span>Sin registro en agosto</span></div></div>
+</section>
+
+<section>
+<div class="shead"><span class="num">09</span><div><h2>Top tiendas</h2>
+<p>Las 15 de mayor volumen acumulado. Abajo, el detalle completo de los 117 locales.</p></div></div>
+<div class="card"><svg viewBox="0 0 760 506" class="chart"><text x="236" y="28" text-anchor="end" class="lab">AV. CORRIENTES 1299 (ESQ. T…</text><text x="328" y="28" text-anchor="end" class="tick">SAN NICOLAS</text><rect x="340" y="14" width="358.0" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="708.0" y="28" class="val">296</text><text x="236" y="60" text-anchor="end" class="lab">AV. RIVADAVIA 5013</text><text x="328" y="60" text-anchor="end" class="tick">CABALLITO</text><rect x="340" y="46" width="354.4" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="704.4" y="60" class="val">293</text><text x="236" y="92" text-anchor="end" class="lab">AV. CABILDO 4855</text><text x="328" y="92" text-anchor="end" class="tick">NUÑEZ</text><rect x="340" y="78" width="347.1" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="697.1" y="92" class="val">287</text><text x="236" y="124" text-anchor="end" class="lab">AV. CABILDO 2102 (ESQ. JURA…</text><text x="328" y="124" text-anchor="end" class="tick">BELGRANO</text><rect x="340" y="110" width="341.1" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="691.1" y="124" class="val">282</text><text x="236" y="156" text-anchor="end" class="lab">BARTOLOME MITRE 2799 (ESQ P…</text><text x="328" y="156" text-anchor="end" class="tick">BALVANERA</text><rect x="340" y="142" width="331.4" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="681.4" y="156" class="val">274</text><text x="236" y="188" text-anchor="end" class="lab">AV. CALCHAQUI 3950 LOC 1021…</text><text x="328" y="188" text-anchor="end" class="tick">QUILMES</text><rect x="340" y="174" width="304.8" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="654.8" y="188" class="val">252</text><text x="236" y="220" text-anchor="end" class="lab">SHOP. ALTO AVELLANEDA - GUE…</text><text x="328" y="220" text-anchor="end" class="tick">AVELLANEDA</text><rect x="340" y="206" width="293.9" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="643.9" y="220" class="val">243</text><text x="236" y="252" text-anchor="end" class="lab">AV. CORRIENTES 1498 (ESQ. P…</text><text x="328" y="252" text-anchor="end" class="tick">SAN NICOLAS</text><rect x="340" y="238" width="274.5" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="624.5" y="252" class="val">227</text><text x="236" y="284" text-anchor="end" class="lab">CRAMER 3300</text><text x="328" y="284" text-anchor="end" class="tick">NUÑEZ</text><rect x="340" y="270" width="272.1" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="622.1" y="284" class="val">225</text><text x="236" y="316" text-anchor="end" class="lab">FLORIDA 970</text><text x="328" y="316" text-anchor="end" class="tick">RETIRO</text><rect x="340" y="302" width="270.9" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="620.9" y="316" class="val">224</text><text x="236" y="348" text-anchor="end" class="lab">AV. CORDOBA 315 (ESQ. ALEM)</text><text x="328" y="348" text-anchor="end" class="tick">RETIRO</text><rect x="340" y="334" width="262.5" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="612.5" y="348" class="val">217</text><text x="236" y="380" text-anchor="end" class="lab">OLGA COSSETTINI 263 (ESQ. V…</text><text x="328" y="380" text-anchor="end" class="tick">PUERTO MADERO</text><rect x="340" y="366" width="260.0" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="610.0" y="380" class="val">215</text><text x="236" y="412" text-anchor="end" class="lab">AV. SANTA FE 4292 (ESQ. URI…</text><text x="328" y="412" text-anchor="end" class="tick">PALERMO</text><rect x="340" y="398" width="252.8" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="602.8" y="412" class="val">209</text><text x="236" y="444" text-anchor="end" class="lab">RECONQUISTA 601 (ESQ. TUCUM…</text><text x="328" y="444" text-anchor="end" class="tick">SAN NICOLAS</text><rect x="340" y="430" width="249.1" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="599.1" y="444" class="val">206</text><text x="236" y="476" text-anchor="end" class="lab">AV. AVELLANEDA 3502</text><text x="328" y="476" text-anchor="end" class="tick">FLORES</text><rect x="340" y="462" width="245.5" height="18" rx="3" fill="#F2B33D" opacity=".85"/><text x="595.5" y="476" class="val">203</text></svg>
+<div class="legendline"><span><b>Top 10</b> concentra el 25,4% del sell-out</span><span><b>Líder</b> Av. Corrientes 1299 · 296 u.</span></div></div>
+<div class="card" style="margin-top:18px"><h3>Detalle por local</h3>
+<div class="tools"><input type="search" id="q" placeholder="Buscar por dirección, barrio, formato o ID…"></div>
+<div class="scroll"><table id="tt">
+<thead><tr><th class="num">#</th><th class="num">ID</th><th>Dirección</th><th>Barrio</th><th>Formato</th><th class="num">Mar</th><th class="num">Abr</th><th class="num">May</th><th class="num">Jun</th><th class="num">Jul</th><th class="num">Ago</th><th class="num">Total</th><th class="num">Cajas</th><th class="num">SKU</th><th class="num">Meses</th></tr></thead>
+<tbody><tr data-s="av. corrientes 1299 (esq. talcahuano) san nicolas market 965"><td class="num dim">1</td><td class="num">965</td><td class="nm">AV. CORRIENTES 1299 (ESQ. TALCAHUANO)</td><td>SAN NICOLAS</td><td class="tag">MARKET</td><td class="num">77</td><td class="num">124</td><td class="num">53</td><td class="num">28</td><td class="num">9</td><td class="num">5</td><td class="num strong">296</td><td class="num">10,1</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. rivadavia 5013 caballito market 901"><td class="num dim">2</td><td class="num">901</td><td class="nm">AV. RIVADAVIA 5013</td><td>CABALLITO</td><td class="tag">MARKET</td><td class="num">76</td><td class="num">84</td><td class="num">73</td><td class="num">25</td><td class="num">25</td><td class="num">10</td><td class="num strong">293</td><td class="num">9,6</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. cabildo 4855 nuñez drugstore 316"><td class="num dim">3</td><td class="num">316</td><td class="nm">AV. CABILDO 4855</td><td>NUÑEZ</td><td class="tag">DRUGSTORE</td><td class="num">36</td><td class="num">70</td><td class="num">61</td><td class="num">75</td><td class="num">32</td><td class="num">13</td><td class="num strong">287</td><td class="num">10,3</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. cabildo 2102 (esq. juramento) belgrano drugstore 12"><td class="num dim">4</td><td class="num">12</td><td class="nm">AV. CABILDO 2102 (ESQ. JURAMENTO)</td><td>BELGRANO</td><td class="tag">DRUGSTORE</td><td class="num">60</td><td class="num">95</td><td class="num">57</td><td class="num">31</td><td class="num">32</td><td class="num">7</td><td class="num strong">282</td><td class="num">9,3</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="bartolome mitre 2799 (esq pueyrredon) balvanera drugstore 359"><td class="num dim">5</td><td class="num">359</td><td class="nm">BARTOLOME MITRE 2799 (ESQ PUEYRREDON)</td><td>BALVANERA</td><td class="tag">DRUGSTORE</td><td class="num">61</td><td class="num">86</td><td class="num">44</td><td class="num">35</td><td class="num">42</td><td class="num">6</td><td class="num strong">274</td><td class="num">9,5</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. calchaqui 3950 loc 1021 – quilmes factory quilmes drugstore 831"><td class="num dim">6</td><td class="num">831</td><td class="nm">AV. CALCHAQUI 3950 LOC 1021 – QUILMES FACTORY</td><td>QUILMES</td><td class="tag">DRUGSTORE</td><td class="num">20</td><td class="num">36</td><td class="num">55</td><td class="num">51</td><td class="num">47</td><td class="num">43</td><td class="num strong">252</td><td class="num">9,4</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="shop. alto avellaneda - guemes 897 - loc313 avellaneda shopping 27"><td class="num dim">7</td><td class="num">27</td><td class="nm">SHOP. ALTO AVELLANEDA - GUEMES 897 - LOC313</td><td>AVELLANEDA</td><td class="tag">SHOPPING</td><td class="num">7</td><td class="num">91</td><td class="num">62</td><td class="num">38</td><td class="num">39</td><td class="num">6</td><td class="num strong">243</td><td class="num">8,3</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. corrientes 1498 (esq. parana) san nicolas market 947"><td class="num dim">8</td><td class="num">947</td><td class="nm">AV. CORRIENTES 1498 (ESQ. PARANA)</td><td>SAN NICOLAS</td><td class="tag">MARKET</td><td class="num">63</td><td class="num">83</td><td class="num">43</td><td class="num">22</td><td class="num">12</td><td class="num">4</td><td class="num strong">227</td><td class="num">8,9</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="cramer 3300 nuñez bar 380"><td class="num dim">9</td><td class="num">380</td><td class="nm">CRAMER 3300</td><td>NUÑEZ</td><td class="tag">BAR</td><td class="num">63</td><td class="num">66</td><td class="num">43</td><td class="num">26</td><td class="num">23</td><td class="num">4</td><td class="num strong">225</td><td class="num">8,8</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="florida 970 retiro drugstore 142"><td class="num dim">10</td><td class="num">142</td><td class="nm">FLORIDA 970</td><td>RETIRO</td><td class="tag">DRUGSTORE</td><td class="num">86</td><td class="num">69</td><td class="num">26</td><td class="num">15</td><td class="num">17</td><td class="num">11</td><td class="num strong">224</td><td class="num">8,5</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. cordoba 315 (esq. alem) retiro bar 145"><td class="num dim">11</td><td class="num">145</td><td class="nm">AV. CORDOBA 315 (ESQ. ALEM)</td><td>RETIRO</td><td class="tag">BAR</td><td class="num">72</td><td class="num">50</td><td class="num">49</td><td class="num">24</td><td class="num">22</td><td class="num">—</td><td class="num strong">217</td><td class="num">8,3</td><td class="num">8</td><td class="num">5</td></tr><tr data-s="olga cossettini 263 (esq. victoria ocampo) puerto madero bar 214"><td class="num dim">12</td><td class="num">214</td><td class="nm">OLGA COSSETTINI 263 (ESQ. VICTORIA OCAMPO)</td><td>PUERTO MADERO</td><td class="tag">BAR</td><td class="num">74</td><td class="num">68</td><td class="num">45</td><td class="num">15</td><td class="num">10</td><td class="num">3</td><td class="num strong">215</td><td class="num">8,6</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. santa fe 4292 (esq. uriarte) palermo drugstore 109"><td class="num dim">13</td><td class="num">109</td><td class="nm">AV. SANTA FE 4292 (ESQ. URIARTE)</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">38</td><td class="num">71</td><td class="num">46</td><td class="num">34</td><td class="num">19</td><td class="num">1</td><td class="num strong">209</td><td class="num">8,2</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="reconquista 601 (esq. tucuman) san nicolas bar 149"><td class="num dim">14</td><td class="num">149</td><td class="nm">RECONQUISTA 601 (ESQ. TUCUMAN)</td><td>SAN NICOLAS</td><td class="tag">BAR</td><td class="num">107</td><td class="num">46</td><td class="num">20</td><td class="num">15</td><td class="num">13</td><td class="num">5</td><td class="num strong">206</td><td class="num">7,6</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. avellaneda 3502 flores drugstore 348"><td class="num dim">15</td><td class="num">348</td><td class="nm">AV. AVELLANEDA 3502</td><td>FLORES</td><td class="tag">DRUGSTORE</td><td class="num">15</td><td class="num">30</td><td class="num">69</td><td class="num">28</td><td class="num">55</td><td class="num">6</td><td class="num strong">203</td><td class="num">7,7</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="vedia 3626 - piso 3 - local 1 saavedra shopping 330"><td class="num dim">16</td><td class="num">330</td><td class="nm">VEDIA 3626 - PISO 3 - LOCAL 1</td><td>SAAVEDRA</td><td class="tag">SHOPPING</td><td class="num">50</td><td class="num">54</td><td class="num">32</td><td class="num">42</td><td class="num">21</td><td class="num">1</td><td class="num strong">200</td><td class="num">8,1</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="florida 715 san nicolas market 954"><td class="num dim">17</td><td class="num">954</td><td class="nm">FLORIDA 715</td><td>SAN NICOLAS</td><td class="tag">MARKET</td><td class="num">58</td><td class="num">80</td><td class="num">17</td><td class="num">22</td><td class="num">14</td><td class="num">3</td><td class="num strong">194</td><td class="num">7,5</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="lavalle 1102 (esq. cerrito) san nicolas drugstore 369"><td class="num dim">18</td><td class="num">369</td><td class="nm">LAVALLE 1102 (ESQ. CERRITO)</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">41</td><td class="num">41</td><td class="num">47</td><td class="num">13</td><td class="num">41</td><td class="num">8</td><td class="num strong">191</td><td class="num">8,1</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="est. retiro (san martin) - av. r. mejia 1550 - l120 (hall estacion) retiro trenes 621"><td class="num dim">19</td><td class="num">621</td><td class="nm">EST. RETIRO (SAN MARTIN) - AV. R. MEJIA 1550 - L120 (HALL ESTACION)</td><td>RETIRO</td><td class="tag">TRENES</td><td class="num">61</td><td class="num">20</td><td class="num">59</td><td class="num">25</td><td class="num">23</td><td class="num">3</td><td class="num strong">191</td><td class="num">8,0</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="shop.unicenter - parana 3745 -loc. n1/ 1316 martinez market 803"><td class="num dim">20</td><td class="num">803</td><td class="nm">SHOP.UNICENTER - PARANA 3745 -LOC. N1/ 1316</td><td>MARTINEZ</td><td class="tag">MARKET</td><td class="num">47</td><td class="num">39</td><td class="num">42</td><td class="num">25</td><td class="num">32</td><td class="num">4</td><td class="num strong">189</td><td class="num">7,8</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. cabildo 2501 (esq. av. monroe) belgrano market 934"><td class="num dim">21</td><td class="num">934</td><td class="nm">AV. CABILDO 2501 (ESQ. AV. MONROE)</td><td>BELGRANO</td><td class="tag">MARKET</td><td class="num">34</td><td class="num">36</td><td class="num">53</td><td class="num">38</td><td class="num">20</td><td class="num">3</td><td class="num strong">184</td><td class="num">7,1</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. santa fe 4507 palermo drugstore 351"><td class="num dim">22</td><td class="num">351</td><td class="nm">AV. SANTA FE 4507</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">41</td><td class="num">74</td><td class="num">30</td><td class="num">12</td><td class="num">17</td><td class="num">4</td><td class="num strong">178</td><td class="num">7,0</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. rivadavia 2701 (esq. castelli) balvanera drugstore 128"><td class="num dim">23</td><td class="num">128</td><td class="nm">AV. RIVADAVIA 2701 (ESQ. CASTELLI)</td><td>BALVANERA</td><td class="tag">DRUGSTORE</td><td class="num">29</td><td class="num">64</td><td class="num">54</td><td class="num">11</td><td class="num">18</td><td class="num">1</td><td class="num strong">177</td><td class="num">6,7</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="bartolome mitre 1101 (esq. cerrito) san nicolas bar 243"><td class="num dim">24</td><td class="num">243</td><td class="nm">BARTOLOME MITRE 1101 (ESQ. CERRITO)</td><td>SAN NICOLAS</td><td class="tag">BAR</td><td class="num">51</td><td class="num">46</td><td class="num">42</td><td class="num">10</td><td class="num">17</td><td class="num">6</td><td class="num strong">172</td><td class="num">8,2</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="guatemala 5451 palermo drugstore 356"><td class="num dim">25</td><td class="num">356</td><td class="nm">GUATEMALA 5451</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">67</td><td class="num">43</td><td class="num">22</td><td class="num">21</td><td class="num">17</td><td class="num">1</td><td class="num strong">171</td><td class="num">7,0</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="montes de oca 815 barracas market 971"><td class="num dim">26</td><td class="num">971</td><td class="nm">MONTES DE OCA 815</td><td>BARRACAS</td><td class="tag">MARKET</td><td class="num">19</td><td class="num">49</td><td class="num">38</td><td class="num">23</td><td class="num">30</td><td class="num">5</td><td class="num strong">164</td><td class="num">7,2</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="montes de oca 3 barracas bar 367"><td class="num dim">27</td><td class="num">367</td><td class="nm">MONTES DE OCA 3</td><td>BARRACAS</td><td class="tag">BAR</td><td class="num">13</td><td class="num">27</td><td class="num">50</td><td class="num">29</td><td class="num">37</td><td class="num">8</td><td class="num strong">164</td><td class="num">7,1</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. independencia 1107 monserrat bar 250"><td class="num dim">28</td><td class="num">250</td><td class="nm">AV. INDEPENDENCIA 1107</td><td>MONSERRAT</td><td class="tag">BAR</td><td class="num">48</td><td class="num">60</td><td class="num">35</td><td class="num">7</td><td class="num">4</td><td class="num">6</td><td class="num strong">160</td><td class="num">7,2</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="reconquista 899 (esq. paraguay) retiro bar 146"><td class="num dim">29</td><td class="num">146</td><td class="nm">RECONQUISTA 899 (ESQ. PARAGUAY)</td><td>RETIRO</td><td class="tag">BAR</td><td class="num">77</td><td class="num">43</td><td class="num">22</td><td class="num">14</td><td class="num">2</td><td class="num">—</td><td class="num strong">158</td><td class="num">7,0</td><td class="num">8</td><td class="num">5</td></tr><tr data-s="amenabar 1202 colegiales drugstore 374"><td class="num dim">30</td><td class="num">374</td><td class="nm">AMENABAR 1202</td><td>COLEGIALES</td><td class="tag">DRUGSTORE</td><td class="num">32</td><td class="num">62</td><td class="num">30</td><td class="num">19</td><td class="num">10</td><td class="num">4</td><td class="num strong">157</td><td class="num">6,9</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="j. salguero 3077 palermo drugstore 144"><td class="num dim">31</td><td class="num">144</td><td class="nm">J. SALGUERO 3077</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">33</td><td class="num">47</td><td class="num">27</td><td class="num">23</td><td class="num">24</td><td class="num">—</td><td class="num strong">154</td><td class="num">6,0</td><td class="num">8</td><td class="num">5</td></tr><tr data-s="shop. alto avellaneda - guemes 897 - go22 avellaneda shopping 26"><td class="num dim">32</td><td class="num">26</td><td class="nm">SHOP. ALTO AVELLANEDA - GUEMES 897 - GO22</td><td>AVELLANEDA</td><td class="tag">SHOPPING</td><td class="num">11</td><td class="num">21</td><td class="num">20</td><td class="num">34</td><td class="num">49</td><td class="num">17</td><td class="num strong">152</td><td class="num">6,7</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="j.d. peron 4296 (esq. pringles) palermo bar 338"><td class="num dim">33</td><td class="num">338</td><td class="nm">J.D. PERON 4296 (ESQ. PRINGLES)</td><td>PALERMO</td><td class="tag">BAR</td><td class="num">9</td><td class="num">26</td><td class="num">26</td><td class="num">48</td><td class="num">31</td><td class="num">11</td><td class="num strong">151</td><td class="num">7,3</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. corrientes 2500 (esq. larrea) balvanera drugstore 353"><td class="num dim">34</td><td class="num">353</td><td class="nm">AV. CORRIENTES 2500 (ESQ. LARREA)</td><td>BALVANERA</td><td class="tag">DRUGSTORE</td><td class="num">36</td><td class="num">41</td><td class="num">39</td><td class="num">22</td><td class="num">13</td><td class="num">—</td><td class="num strong">151</td><td class="num">6,9</td><td class="num">8</td><td class="num">5</td></tr><tr data-s="av. diaz velez 5000 caballito drugstore 320"><td class="num dim">35</td><td class="num">320</td><td class="nm">AV. DIAZ VELEZ 5000</td><td>CABALLITO</td><td class="tag">DRUGSTORE</td><td class="num">39</td><td class="num">24</td><td class="num">52</td><td class="num">18</td><td class="num">10</td><td class="num">4</td><td class="num strong">147</td><td class="num">6,7</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="laprida 399 lomas de zamora drugstore 307"><td class="num dim">36</td><td class="num">307</td><td class="nm">LAPRIDA 399</td><td>LOMAS DE ZAMORA</td><td class="tag">DRUGSTORE</td><td class="num">36</td><td class="num">47</td><td class="num">10</td><td class="num">19</td><td class="num">25</td><td class="num">9</td><td class="num strong">146</td><td class="num">6,6</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="florida 425 san nicolas drugstore 13"><td class="num dim">37</td><td class="num">13</td><td class="nm">FLORIDA 425</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">33</td><td class="num">52</td><td class="num">34</td><td class="num">9</td><td class="num">4</td><td class="num">2</td><td class="num strong">134</td><td class="num">5,4</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. cabildo 902 (esq. t. garcia) palermo market 968"><td class="num dim">38</td><td class="num">968</td><td class="nm">AV. CABILDO 902 (ESQ. T. GARCIA)</td><td>PALERMO</td><td class="tag">MARKET</td><td class="num">36</td><td class="num">39</td><td class="num">18</td><td class="num">15</td><td class="num">16</td><td class="num">9</td><td class="num strong">133</td><td class="num">6,3</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. corrientes 4002 almagro drugstore 345"><td class="num dim">39</td><td class="num">345</td><td class="nm">AV. CORRIENTES 4002</td><td>ALMAGRO</td><td class="tag">DRUGSTORE</td><td class="num">15</td><td class="num">36</td><td class="num">32</td><td class="num">23</td><td class="num">17</td><td class="num">9</td><td class="num strong">132</td><td class="num">6,3</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. avellaneda 3000 (esq. argerich) flores drugstore 121"><td class="num dim">40</td><td class="num">121</td><td class="nm">AV. AVELLANEDA 3000 (ESQ. ARGERICH)</td><td>FLORES</td><td class="tag">DRUGSTORE</td><td class="num">15</td><td class="num">30</td><td class="num">29</td><td class="num">26</td><td class="num">26</td><td class="num">5</td><td class="num strong">131</td><td class="num">2,2</td><td class="num">3</td><td class="num">6</td></tr><tr data-s="av. rivadavia 11500 devoto drugstore 344"><td class="num dim">41</td><td class="num">344</td><td class="nm">AV. RIVADAVIA 11500</td><td>DEVOTO</td><td class="tag">DRUGSTORE</td><td class="num">16</td><td class="num">53</td><td class="num">17</td><td class="num">17</td><td class="num">18</td><td class="num">8</td><td class="num strong">129</td><td class="num">4,2</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="viamonte 799 (esq. esmeralda 703) san nicolas bar 236"><td class="num dim">42</td><td class="num">236</td><td class="nm">VIAMONTE 799 (ESQ. ESMERALDA 703)</td><td>SAN NICOLAS</td><td class="tag">BAR</td><td class="num">21</td><td class="num">53</td><td class="num">24</td><td class="num">21</td><td class="num">7</td><td class="num">—</td><td class="num strong">126</td><td class="num">5,9</td><td class="num">8</td><td class="num">5</td></tr><tr data-s="av. alicia moreau de justo 750 puerto madero drugstore 308"><td class="num dim">43</td><td class="num">308</td><td class="nm">AV. ALICIA MOREAU DE JUSTO 750</td><td>PUERTO MADERO</td><td class="tag">DRUGSTORE</td><td class="num">45</td><td class="num">47</td><td class="num">16</td><td class="num">5</td><td class="num">—</td><td class="num">1</td><td class="num strong">114</td><td class="num">4,3</td><td class="num">8</td><td class="num">5</td></tr><tr data-s="jose luis borges 1692 palermo drugstore 816"><td class="num dim">44</td><td class="num">816</td><td class="nm">JOSE LUIS BORGES 1692</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">25</td><td class="num">29</td><td class="num">27</td><td class="num">18</td><td class="num">12</td><td class="num">1</td><td class="num strong">112</td><td class="num">5,5</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. rivadavia 4513 caballito drugstore 379"><td class="num dim">45</td><td class="num">379</td><td class="nm">AV. RIVADAVIA 4513</td><td>CABALLITO</td><td class="tag">DRUGSTORE</td><td class="num">24</td><td class="num">24</td><td class="num">26</td><td class="num">20</td><td class="num">3</td><td class="num">3</td><td class="num strong">100</td><td class="num">5,3</td><td class="num">7</td><td class="num">6</td></tr><tr data-s="lavalle 802 (esq. esmeralda) san nicolas drugstore 89"><td class="num dim">46</td><td class="num">89</td><td class="nm">LAVALLE 802 (ESQ. ESMERALDA)</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">29</td><td class="num">33</td><td class="num">7</td><td class="num">3</td><td class="num">21</td><td class="num">5</td><td class="num strong">98</td><td class="num">3,6</td><td class="num">6</td><td class="num">6</td></tr><tr data-s="av. santa fe 4596 (esq. godoy cruz) palermo drugstore 116"><td class="num dim">47</td><td class="num">116</td><td class="nm">AV. SANTA FE 4596 (ESQ. GODOY CRUZ)</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">30</td><td class="num">31</td><td class="num">19</td><td class="num">10</td><td class="num">4</td><td class="num">4</td><td class="num strong">98</td><td class="num">4,2</td><td class="num">8</td><td class="num">6</td></tr><tr data-s="av. santa fe 2180 recoleta drugstore 335"><td class="num dim">48</td><td class="num">335</td><td class="nm">AV. SANTA FE 2180</td><td>RECOLETA</td><td class="tag">DRUGSTORE</td><td class="num">11</td><td class="num">34</td><td class="num">20</td><td class="num">10</td><td class="num">4</td><td class="num">7</td><td class="num strong">86</td><td class="num">1,4</td><td class="num">3</td><td class="num">6</td></tr><tr data-s="palmas del pilar - las magnolias 754 - pa pilar market 811"><td class="num dim">49</td><td class="num">811</td><td class="nm">PALMAS DEL PILAR - LAS MAGNOLIAS 754 - PA</td><td>PILAR</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">58</td><td class="num">27</td><td class="num strong">85</td><td class="num">5,3</td><td class="num">5</td><td class="num">2</td></tr><tr data-s="marcelo t. de alvear 2201 (esq. uriburu) recoleta bar 177"><td class="num dim">50</td><td class="num">177</td><td class="nm">MARCELO T. DE ALVEAR 2201 (ESQ. URIBURU)</td><td>RECOLETA</td><td class="tag">BAR</td><td class="num">13</td><td class="num">26</td><td class="num">20</td><td class="num">12</td><td class="num">7</td><td class="num">4</td><td class="num strong">82</td><td class="num">1,4</td><td class="num">3</td><td class="num">6</td></tr><tr data-s="ezeiza - terminal c - preembarque - pa ezeiza aeropuerto 172"><td class="num dim">51</td><td class="num">172</td><td class="nm">EZEIZA - TERMINAL C - PREEMBARQUE - PA</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">18</td><td class="num">5</td><td class="num">34</td><td class="num">14</td><td class="num">5</td><td class="num">—</td><td class="num strong">76</td><td class="num">4,8</td><td class="num">5</td><td class="num">5</td></tr><tr data-s="aeropuerto ezeiza - ntp ll - chico (eze_tppb_c_0010) ezeiza aeropuerto 334"><td class="num dim">52</td><td class="num">334</td><td class="nm">AEROPUERTO EZEIZA - NTP ll - CHICO (EZE_TPPB_C_0010)</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">25</td><td class="num">17</td><td class="num">20</td><td class="num">9</td><td class="num">2</td><td class="num">—</td><td class="num strong">73</td><td class="num">4,6</td><td class="num">5</td><td class="num">5</td></tr><tr data-s="est. palermo (san martin)- av. del libertador 3872 palermo trenes 627"><td class="num dim">53</td><td class="num">627</td><td class="nm">EST. PALERMO (SAN MARTIN)- AV. DEL LIBERTADOR 3872</td><td>PALERMO</td><td class="tag">TRENES</td><td class="num">—</td><td class="num">—</td><td class="num">54</td><td class="num">19</td><td class="num">—</td><td class="num">—</td><td class="num strong">73</td><td class="num">1,2</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="aeropuerto ezeiza - ntp l (eze_tppb_c_0002) ezeiza aeropuerto 333"><td class="num dim">54</td><td class="num">333</td><td class="nm">AEROPUERTO EZEIZA - NTP l (EZE_TPPB_C_0002)</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">54</td><td class="num">10</td><td class="num">2</td><td class="num">3</td><td class="num">—</td><td class="num">—</td><td class="num strong">69</td><td class="num">4,3</td><td class="num">4</td><td class="num">4</td></tr><tr data-s="macacha guemes 260 - dique 4 - container puerto madero drugstore 713"><td class="num dim">55</td><td class="num">713</td><td class="nm">MACACHA GUEMES 260 - DIQUE 4 - CONTAINER</td><td>PUERTO MADERO</td><td class="tag">DRUGSTORE</td><td class="num">12</td><td class="num">14</td><td class="num">14</td><td class="num">8</td><td class="num">5</td><td class="num">2</td><td class="num strong">55</td><td class="num">1,1</td><td class="num">5</td><td class="num">6</td></tr><tr data-s="fernandez de enciso 3951 villa devoto drugstore 389"><td class="num dim">56</td><td class="num">389</td><td class="nm">FERNANDEZ DE ENCISO 3951</td><td>VILLA DEVOTO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">3</td><td class="num">20</td><td class="num">15</td><td class="num">13</td><td class="num">3</td><td class="num strong">54</td><td class="num">2,5</td><td class="num">7</td><td class="num">5</td></tr><tr data-s="shop. san justo - av. brig gral juan manuel de rosas 3990 - al lado chango mas san justo market 815"><td class="num dim">57</td><td class="num">815</td><td class="nm">SHOP. SAN JUSTO - AV. BRIG GRAL JUAN MANUEL DE ROSAS 3990 - AL LADO CHANGO MAS</td><td>SAN JUSTO</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">34</td><td class="num">18</td><td class="num strong">52</td><td class="num">3,2</td><td class="num">5</td><td class="num">2</td></tr><tr data-s="rivadavia 147 quilmes market 956"><td class="num dim">58</td><td class="num">956</td><td class="nm">RIVADAVIA 147</td><td>QUILMES</td><td class="tag">MARKET</td><td class="num">8</td><td class="num">16</td><td class="num">5</td><td class="num">11</td><td class="num">8</td><td class="num">1</td><td class="num strong">49</td><td class="num">0,8</td><td class="num">2</td><td class="num">6</td></tr><tr data-s="av. corrientes 1674 san nicolas drugstore 136"><td class="num dim">59</td><td class="num">136</td><td class="nm">AV. CORRIENTES 1674</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">8</td><td class="num">14</td><td class="num">14</td><td class="num">8</td><td class="num">4</td><td class="num">1</td><td class="num strong">49</td><td class="num">1,6</td><td class="num">7</td><td class="num">6</td></tr><tr data-s="av. rivadavia 5285 caballito drugstore 119"><td class="num dim">60</td><td class="num">119</td><td class="nm">AV. RIVADAVIA 5285</td><td>CABALLITO</td><td class="tag">DRUGSTORE</td><td class="num">18</td><td class="num">16</td><td class="num">12</td><td class="num">2</td><td class="num">—</td><td class="num">—</td><td class="num strong">48</td><td class="num">1,4</td><td class="num">5</td><td class="num">4</td></tr><tr data-s="ezeiza - local 35 ezeiza aeropuerto 35"><td class="num dim">61</td><td class="num">35</td><td class="nm">EZEIZA - LOCAL 35</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">48</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">48</td><td class="num">3,0</td><td class="num">3</td><td class="num">1</td></tr><tr data-s="av. corrientes 3901 (esq. salguero) almagro market 918"><td class="num dim">62</td><td class="num">918</td><td class="nm">AV. CORRIENTES 3901 (ESQ. SALGUERO)</td><td>ALMAGRO</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">29</td><td class="num">17</td><td class="num strong">46</td><td class="num">2,9</td><td class="num">5</td><td class="num">2</td></tr><tr data-s="sarmiento 402 san nicolas bar 368"><td class="num dim">63</td><td class="num">368</td><td class="nm">SARMIENTO 402</td><td>SAN NICOLAS</td><td class="tag">BAR</td><td class="num">23</td><td class="num">14</td><td class="num">5</td><td class="num">1</td><td class="num">—</td><td class="num">—</td><td class="num strong">43</td><td class="num">1,6</td><td class="num">5</td><td class="num">4</td></tr><tr data-s="b. de irigoyen 198 (esq. alsina) monserrat drugstore 302"><td class="num dim">64</td><td class="num">302</td><td class="nm">B. DE IRIGOYEN 198 (ESQ. ALSINA)</td><td>MONSERRAT</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">14</td><td class="num">19</td><td class="num strong">33</td><td class="num">2,1</td><td class="num">3</td><td class="num">2</td></tr><tr data-s="florida 605 san nicolas drugstore 9"><td class="num dim">65</td><td class="num">9</td><td class="nm">FLORIDA 605</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">4</td><td class="num">12</td><td class="num">9</td><td class="num">5</td><td class="num">—</td><td class="num">—</td><td class="num strong">30</td><td class="num">1,1</td><td class="num">8</td><td class="num">4</td></tr><tr data-s="ezeiza - terminal b - preembarque - pa (puerta 10 y 11) ezeiza aeropuerto 209"><td class="num dim">66</td><td class="num">209</td><td class="nm">EZEIZA - TERMINAL B - PREEMBARQUE - PA (PUERTA 10 Y 11)</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">14</td><td class="num">9</td><td class="num">4</td><td class="num">1</td><td class="num">1</td><td class="num">—</td><td class="num strong">29</td><td class="num">1,8</td><td class="num">2</td><td class="num">5</td></tr><tr data-s="fernandez de enciso 3942 villa devoto drugstore 286"><td class="num dim">67</td><td class="num">286</td><td class="nm">FERNANDEZ DE ENCISO 3942</td><td>VILLA DEVOTO</td><td class="tag">DRUGSTORE</td><td class="num">26</td><td class="num">2</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">28</td><td class="num">1,6</td><td class="num">5</td><td class="num">2</td></tr><tr data-s="san martin 501 san nicolas drugstore 839"><td class="num dim">68</td><td class="num">839</td><td class="nm">SAN MARTIN 501</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">12</td><td class="num">8</td><td class="num">6</td><td class="num">1</td><td class="num">—</td><td class="num">—</td><td class="num strong">27</td><td class="num">0,8</td><td class="num">3</td><td class="num">4</td></tr><tr data-s="av. rivadavia 3719 caballito market 973"><td class="num dim">69</td><td class="num">973</td><td class="nm">AV. RIVADAVIA 3719</td><td>CABALLITO</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">5</td><td class="num">8</td><td class="num">13</td><td class="num strong">26</td><td class="num">1,6</td><td class="num">4</td><td class="num">3</td></tr><tr data-s="av. santa fe 3219 palermo market 935"><td class="num dim">70</td><td class="num">935</td><td class="nm">AV. SANTA FE 3219</td><td>PALERMO</td><td class="tag">MARKET</td><td class="num">3</td><td class="num">4</td><td class="num">6</td><td class="num">—</td><td class="num">10</td><td class="num">3</td><td class="num strong">26</td><td class="num">0,9</td><td class="num">3</td><td class="num">5</td></tr><tr data-s="est. constitucion (roca) - brasil 1128 - l390 (subsuelo) constitucion trenes 615"><td class="num dim">71</td><td class="num">615</td><td class="nm">EST. CONSTITUCION (ROCA) - BRASIL 1128 - L390 (SUBSUELO)</td><td>CONSTITUCION</td><td class="tag">TRENES</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">17</td><td class="num">9</td><td class="num strong">26</td><td class="num">1,6</td><td class="num">3</td><td class="num">2</td></tr><tr data-s="calle 48 nº 653 (esq. 8) la plata drugstore 75"><td class="num dim">72</td><td class="num">75</td><td class="nm">CALLE 48 Nº 653 (ESQ. 8)</td><td>LA PLATA</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2</td><td class="num">15</td><td class="num">8</td><td class="num strong">25</td><td class="num">1,6</td><td class="num">3</td><td class="num">3</td></tr><tr data-s="peron 301 (esq. 25 de mayo) san nicolas bar 235"><td class="num dim">73</td><td class="num">235</td><td class="nm">PERON 301 (ESQ. 25 DE MAYO)</td><td>SAN NICOLAS</td><td class="tag">BAR</td><td class="num">16</td><td class="num">5</td><td class="num">2</td><td class="num">—</td><td class="num">1</td><td class="num">—</td><td class="num strong">24</td><td class="num">1,3</td><td class="num">4</td><td class="num">4</td></tr><tr data-s="av. rivadavia 225/27 quilmes market 924"><td class="num dim">74</td><td class="num">924</td><td class="nm">AV. RIVADAVIA 225/27</td><td>QUILMES</td><td class="tag">MARKET</td><td class="num">5</td><td class="num">7</td><td class="num">8</td><td class="num">3</td><td class="num">—</td><td class="num">—</td><td class="num strong">23</td><td class="num">0,4</td><td class="num">3</td><td class="num">4</td></tr><tr data-s="pueyrredon 1298 esq. charcas recoleta market 964"><td class="num dim">75</td><td class="num">964</td><td class="nm">PUEYRREDON 1298 ESQ. CHARCAS</td><td>RECOLETA</td><td class="tag">MARKET</td><td class="num">2</td><td class="num">5</td><td class="num">1</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num strong">22</td><td class="num">1,4</td><td class="num">3</td><td class="num">6</td></tr><tr data-s="av. scalabrini ortiz 194 (esq. camargo) villa crespo drugstore 394"><td class="num dim">76</td><td class="num">394</td><td class="nm">AV. SCALABRINI ORTIZ 194 (ESQ. CAMARGO)</td><td>VILLA CRESPO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2</td><td class="num">17</td><td class="num">2</td><td class="num strong">21</td><td class="num">1,3</td><td class="num">4</td><td class="num">3</td></tr><tr data-s="av. caseros 3201 (esq. 24 de noviembre) parque patricios drugstore 293"><td class="num dim">77</td><td class="num">293</td><td class="nm">AV. CASEROS 3201 (ESQ. 24 DE NOVIEMBRE)</td><td>PARQUE PATRICIOS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">8</td><td class="num">3</td><td class="num">2</td><td class="num">1</td><td class="num">6</td><td class="num strong">20</td><td class="num">1,2</td><td class="num">2</td><td class="num">5</td></tr><tr data-s="avda.arturo illia 3770-malvinas argentinas – l.09 – (terrazas de mayo) san miguel market 808"><td class="num dim">78</td><td class="num">808</td><td class="nm">AVDA.ARTURO ILLIA 3770-MALVINAS ARGENTINAS – L.09 – (TERRAZAS DE MAYO)</td><td>SAN MIGUEL</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">11</td><td class="num">8</td><td class="num strong">19</td><td class="num">1,2</td><td class="num">5</td><td class="num">2</td></tr><tr data-s="mercedes 3893 devoto drugstore 372"><td class="num dim">79</td><td class="num">372</td><td class="nm">MERCEDES 3893</td><td>DEVOTO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">15</td><td class="num">4</td><td class="num strong">19</td><td class="num">1,2</td><td class="num">4</td><td class="num">2</td></tr><tr data-s="av. rivadavia 301 quilmes drugstore 375"><td class="num dim">80</td><td class="num">375</td><td class="nm">AV. RIVADAVIA 301</td><td>QUILMES</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">11</td><td class="num">—</td><td class="num strong">18</td><td class="num">0,3</td><td class="num">3</td><td class="num">2</td></tr><tr data-s="rivadavia 51 quilmes drugstore 388"><td class="num dim">81</td><td class="num">388</td><td class="nm">RIVADAVIA 51</td><td>QUILMES</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">3</td><td class="num">3</td><td class="num">7</td><td class="num">5</td><td class="num strong">18</td><td class="num">0,3</td><td class="num">3</td><td class="num">4</td></tr><tr data-s="av. rivadavia 5580 caballito drugstore 370"><td class="num dim">82</td><td class="num">370</td><td class="nm">AV. RIVADAVIA 5580</td><td>CABALLITO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">11</td><td class="num">6</td><td class="num">1</td><td class="num strong">18</td><td class="num">0,7</td><td class="num">5</td><td class="num">3</td></tr><tr data-s="ezeiza - terminal a - arribos - pb ezeiza aeropuerto 36"><td class="num dim">83</td><td class="num">36</td><td class="nm">EZEIZA - TERMINAL A - ARRIBOS - PB</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">5</td><td class="num">6</td><td class="num">1</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num strong">17</td><td class="num">1,1</td><td class="num">2</td><td class="num">6</td></tr><tr data-s="luppi 901 (esq. av. saenz) pompeya drugstore 386"><td class="num dim">84</td><td class="num">386</td><td class="nm">LUPPI 901 (ESQ. AV. SAENZ)</td><td>POMPEYA</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num">16</td><td class="num">—</td><td class="num strong">17</td><td class="num">1,1</td><td class="num">1</td><td class="num">2</td></tr><tr data-s="ezeiza terminal b - preembarque - pa (puerta 7 y 8) ezeiza aeropuerto 38"><td class="num dim">85</td><td class="num">38</td><td class="nm">EZEIZA TERMINAL B - PREEMBARQUE - PA (PUERTA 7 Y 8)</td><td>EZEIZA</td><td class="tag">AEROPUERTO</td><td class="num">10</td><td class="num">4</td><td class="num">2</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">16</td><td class="num">1,0</td><td class="num">1</td><td class="num">3</td></tr><tr data-s="maipu 229 banfield market 921"><td class="num dim">86</td><td class="num">921</td><td class="nm">MAIPU 229</td><td>BANFIELD</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">15</td><td class="num">1</td><td class="num strong">16</td><td class="num">1,0</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="cuba 3305 (esq. m. pedraza) nuñez drugstore 346"><td class="num dim">87</td><td class="num">346</td><td class="nm">CUBA 3305 (ESQ. M. PEDRAZA)</td><td>NUÑEZ</td><td class="tag">DRUGSTORE</td><td class="num">14</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">14</td><td class="num">0,9</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="av. callao 1601 (esq. vicente lopez) recoleta drugstore 65"><td class="num dim">88</td><td class="num">65</td><td class="nm">AV. CALLAO 1601 (ESQ. VICENTE LOPEZ)</td><td>RECOLETA</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">6</td><td class="num strong">13</td><td class="num">0,8</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="shop. terrazas de mayo - av arturo illia 3770- stand pb malvinas argentinas drugstore 841"><td class="num dim">89</td><td class="num">841</td><td class="nm">SHOP. TERRAZAS DE MAYO - AV ARTURO ILLIA 3770- STAND PB</td><td>MALVINAS ARGENTINAS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">12</td><td class="num strong">12</td><td class="num">0,8</td><td class="num">3</td><td class="num">1</td></tr><tr data-s="av. rivadavia 5401 (esq. rojas) caballito market 957"><td class="num dim">90</td><td class="num">957</td><td class="nm">AV. RIVADAVIA 5401 (ESQ. ROJAS)</td><td>CABALLITO</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">9</td><td class="num">3</td><td class="num strong">12</td><td class="num">0,8</td><td class="num">1</td><td class="num">2</td></tr><tr data-s="av. rivadavia 6611 flores market 955"><td class="num dim">91</td><td class="num">955</td><td class="nm">AV. RIVADAVIA 6611</td><td>FLORES</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">9</td><td class="num">2</td><td class="num strong">11</td><td class="num">0,7</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="marcelo t. de alvear 1208/10 (esq. libertad) retiro drugstore 68"><td class="num dim">92</td><td class="num">68</td><td class="nm">MARCELO T. DE ALVEAR 1208/10 (ESQ. LIBERTAD)</td><td>RETIRO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">11</td><td class="num">—</td><td class="num strong">11</td><td class="num">0,7</td><td class="num">2</td><td class="num">1</td></tr><tr data-s="bartolome mitre 301 (esq. 25 mayo) san nicolas drugstore 395"><td class="num dim">93</td><td class="num">395</td><td class="nm">BARTOLOME MITRE 301 (ESQ. 25 MAYO)</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">3</td><td class="num strong">10</td><td class="num">0,6</td><td class="num">5</td><td class="num">2</td></tr><tr data-s="av. montes de oca 872 barracas drugstore 317"><td class="num dim">94</td><td class="num">317</td><td class="nm">AV. MONTES DE OCA 872</td><td>BARRACAS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">3</td><td class="num strong">10</td><td class="num">0,6</td><td class="num">3</td><td class="num">2</td></tr><tr data-s="fabian onzari 196 wilde eess 227"><td class="num dim">95</td><td class="num">227</td><td class="nm">FABIAN ONZARI 196</td><td>WILDE</td><td class="tag">EESS</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">3</td><td class="num strong">10</td><td class="num">0,6</td><td class="num">1</td><td class="num">2</td></tr><tr data-s="av. corrientes 893 san nicolas drugstore 393"><td class="num dim">96</td><td class="num">393</td><td class="nm">AV. CORRIENTES 893</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">10</td><td class="num strong">10</td><td class="num">0,6</td><td class="num">2</td><td class="num">1</td></tr><tr data-s="juncal 1214 recoleta drugstore 821"><td class="num dim">97</td><td class="num">821</td><td class="nm">JUNCAL 1214</td><td>RECOLETA</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">10</td><td class="num">—</td><td class="num strong">10</td><td class="num">0,6</td><td class="num">2</td><td class="num">1</td></tr><tr data-s="av. alem 1096 (esq. rojas) san nicolas drugstore 319"><td class="num dim">98</td><td class="num">319</td><td class="nm">AV. ALEM 1096 (ESQ. ROJAS)</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">4</td><td class="num">3</td><td class="num">2</td><td class="num">—</td><td class="num strong">9</td><td class="num">0,2</td><td class="num">2</td><td class="num">3</td></tr><tr data-s="av. saenz 978 pompeya drugstore 102"><td class="num dim">99</td><td class="num">102</td><td class="nm">AV. SAENZ 978</td><td>POMPEYA</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">1</td><td class="num strong">8</td><td class="num">0,5</td><td class="num">1</td><td class="num">2</td></tr><tr data-s="av. caseros 2700 parque patricios drugstore 325"><td class="num dim">100</td><td class="num">325</td><td class="nm">AV. CASEROS 2700</td><td>PARQUE PATRICIOS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">6</td><td class="num">2</td><td class="num strong">8</td><td class="num">0,5</td><td class="num">1</td><td class="num">2</td></tr><tr data-s="florida 512 san nicolas drugstore 10"><td class="num dim">101</td><td class="num">10</td><td class="nm">FLORIDA 512</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">1</td><td class="num strong">8</td><td class="num">0,1</td><td class="num">1</td><td class="num">6</td></tr><tr data-s="vuelta de obligado 1802 (esq. la pampa) belgrano drugstore 343"><td class="num dim">102</td><td class="num">343</td><td class="nm">VUELTA DE OBLIGADO 1802 (ESQ. LA PAMPA)</td><td>BELGRANO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num strong">8</td><td class="num">0,1</td><td class="num">3</td><td class="num">4</td></tr><tr data-s="viamonte 502 san nicolas drugstore 828"><td class="num dim">103</td><td class="num">828</td><td class="nm">VIAMONTE 502</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">2</td><td class="num">1</td><td class="num">—</td><td class="num">3</td><td class="num">1</td><td class="num">—</td><td class="num strong">7</td><td class="num">0,1</td><td class="num">2</td><td class="num">4</td></tr><tr data-s="francisco acuña de figueroa 506 almagro drugstore 354"><td class="num dim">104</td><td class="num">354</td><td class="nm">FRANCISCO ACUÑA DE FIGUEROA 506</td><td>ALMAGRO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">5</td><td class="num">2</td><td class="num strong">7</td><td class="num">0,4</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="zapiola 1530 ( esq. calchaqui) bernal eess 61"><td class="num dim">105</td><td class="num">61</td><td class="nm">ZAPIOLA 1530 ( ESQ. CALCHAQUI)</td><td>BERNAL</td><td class="tag">EESS</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num strong">7</td><td class="num">0,4</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="marcelo t. de alvear 1402 (esq uruguay) retiro drugstore 832"><td class="num dim">106</td><td class="num">832</td><td class="nm">MARCELO T. DE ALVEAR 1402 (ESQ URUGUAY)</td><td>RETIRO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">7</td><td class="num">—</td><td class="num strong">7</td><td class="num">0,4</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="est. banfield (roca) - antonio beruti 50 - l150 (anden oeste) banfield trenes 614"><td class="num dim">107</td><td class="num">614</td><td class="nm">EST. BANFIELD (ROCA) - ANTONIO BERUTI 50 - L150 (ANDEN OESTE)</td><td>BANFIELD</td><td class="tag">TRENES</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">4</td><td class="num">3</td><td class="num strong">7</td><td class="num">0,4</td><td class="num">1</td><td class="num">2</td></tr><tr data-s="reconquista 491 (esq lavalle) san nicolas bar 332"><td class="num dim">108</td><td class="num">332</td><td class="nm">RECONQUISTA 491 (ESQ LAVALLE)</td><td>SAN NICOLAS</td><td class="tag">BAR</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num">—</td><td class="num">3</td><td class="num">—</td><td class="num strong">4</td><td class="num">0,1</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="av. callao 1291 recoleta drugstore 358"><td class="num dim">109</td><td class="num">358</td><td class="nm">AV. CALLAO 1291</td><td>RECOLETA</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2</td><td class="num">1</td><td class="num strong">3</td><td class="num">0,0</td><td class="num">2</td><td class="num">2</td></tr><tr data-s="calle 12 nº 1099 esq 55 la plata market 905"><td class="num dim">110</td><td class="num">905</td><td class="nm">CALLE 12 Nº 1099 ESQ 55</td><td>LA PLATA</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2</td><td class="num strong">2</td><td class="num">0,1</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="charcas 3698 (no es open) palermo drugstore 298"><td class="num dim">111</td><td class="num">298</td><td class="nm">CHARCAS 3698 (NO ES OPEN)</td><td>PALERMO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2</td><td class="num strong">2</td><td class="num">0,1</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="av. donado 1811 villa ortuzar drugstore 350"><td class="num dim">112</td><td class="num">350</td><td class="nm">AV. DONADO 1811</td><td>VILLA ORTUZAR</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">2</td><td class="num strong">2</td><td class="num">0,1</td><td class="num">2</td><td class="num">1</td></tr><tr data-s="florida 272 san nicolas drugstore 11"><td class="num dim">113</td><td class="num">11</td><td class="nm">FLORIDA 272</td><td>SAN NICOLAS</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">1</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">1</td><td class="num">0,1</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="av. corrientes 4838 almagro drugstore 349"><td class="num dim">114</td><td class="num">349</td><td class="nm">AV. CORRIENTES 4838</td><td>ALMAGRO</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">1</td><td class="num">0,1</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="aeropuerto cordoba - embarque internacional (cor_tap1_c_0187) cordoba aeropuerto 357"><td class="num dim">115</td><td class="num">357</td><td class="nm">AEROPUERTO CORDOBA - EMBARQUE INTERNACIONAL (COR_TAP1_C_0187)</td><td>CORDOBA</td><td class="tag">AEROPUERTO</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">1</td><td class="num">0,1</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="av. cabildo 1674 belgrano market 970"><td class="num dim">116</td><td class="num">970</td><td class="nm">AV. CABILDO 1674</td><td>BELGRANO</td><td class="tag">MARKET</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">1</td><td class="num strong">1</td><td class="num">0,1</td><td class="num">1</td><td class="num">1</td></tr><tr data-s="cuenca 2699 (esq. baigorria) villa del parque drugstore 387"><td class="num dim">117</td><td class="num">387</td><td class="nm">CUENCA 2699 (ESQ. BAIGORRIA)</td><td>VILLA DEL PARQUE</td><td class="tag">DRUGSTORE</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num strong">0</td><td class="num">0,0</td><td class="num">0</td><td class="num">0</td></tr></tbody></table></div>
+<p class="note">Clic en cualquier encabezado para ordenar.</p></div>
+</section>
+
+<section>
+<div class="shead"><span class="num">10</span><div><h2>Concentración de la venta</h2>
+<p>Cuánto del sell-out aportan los locales de mayor volumen.</p></div></div>
+<div class="card"><svg viewBox="0 0 760 290" class="chart"><line x1="52" y1="244.0" x2="736" y2="244.0" class="grid"/><text x="42.0" y="248.0" text-anchor="end" class="tick">0%</text><line x1="52" y1="200.0" x2="736" y2="200.0" class="grid"/><text x="42.0" y="204.0" text-anchor="end" class="tick">20%</text><line x1="52" y1="156.0" x2="736" y2="156.0" class="grid"/><text x="42.0" y="160.0" text-anchor="end" class="tick">40%</text><line x1="52" y1="112.0" x2="736" y2="112.0" class="grid"/><text x="42.0" y="116.0" text-anchor="end" class="tick">60%</text><line x1="52" y1="68.0" x2="736" y2="68.0" class="grid"/><text x="42.0" y="72.0" text-anchor="end" class="tick">80%</text><line x1="52" y1="24.0" x2="736" y2="24.0" class="grid"/><text x="42.0" y="28.0" text-anchor="end" class="tick">100%</text><path d="M 57.8,244 L 57.8,237.6 L 63.7,231.3 L 69.5,225.2 L 75.4,219.1 L 81.2,213.2 L 87.1,207.8 L 92.9,202.6 L 98.8,197.7 L 104.6,192.8 L 110.5,188.0 L 116.3,183.4 L 122.2,178.7 L 128.0,174.3 L 133.8,169.8 L 139.7,165.5 L 145.5,161.2 L 151.4,157.0 L 157.2,152.9 L 163.1,148.8 L 168.9,144.7 L 174.8,140.8 L 180.6,136.9 L 186.5,133.1 L 192.3,129.4 L 198.2,125.8 L 204.0,122.2 L 209.8,118.7 L 215.7,115.3 L 221.5,111.9 L 227.4,108.5 L 233.2,105.2 L 239.1,101.9 L 244.9,98.7 L 250.8,95.4 L 256.6,92.3 L 262.5,89.1 L 268.3,86.2 L 274.2,83.4 L 280.0,80.5 L 285.8,77.7 L 291.7,75.0 L 297.5,72.2 L 303.4,69.8 L 309.2,67.4 L 315.1,65.2 L 320.9,63.1 L 326.8,61.0 L 332.6,59.2 L 338.5,57.4 L 344.3,55.6 L 350.2,53.9 L 356.0,52.4 L 361.8,50.8 L 367.7,49.3 L 373.5,48.1 L 379.4,47.0 L 385.2,45.9 L 391.1,44.8 L 396.9,43.8 L 402.8,42.7 L 408.6,41.7 L 414.5,40.7 L 420.3,39.8 L 426.2,39.1 L 432.0,38.4 L 437.8,37.8 L 443.7,37.2 L 449.5,36.6 L 455.4,36.1 L 461.2,35.5 L 467.1,34.9 L 472.9,34.4 L 478.8,33.9 L 484.6,33.4 L 490.5,32.9 L 496.3,32.5 L 502.2,32.0 L 508.0,31.6 L 513.8,31.2 L 519.7,30.8 L 525.5,30.4 L 531.4,30.1 L 537.2,29.7 L 543.1,29.3 L 548.9,29.0 L 554.8,28.6 L 560.6,28.3 L 566.5,28.1 L 572.3,27.8 L 578.2,27.5 L 584.0,27.3 L 589.8,27.1 L 595.7,26.9 L 601.5,26.6 L 607.4,26.4 L 613.2,26.2 L 619.1,26.0 L 624.9,25.8 L 630.8,25.6 L 636.6,25.5 L 642.5,25.3 L 648.3,25.1 L 654.2,25.0 L 660.0,24.8 L 665.8,24.7 L 671.7,24.5 L 677.5,24.4 L 683.4,24.3 L 689.2,24.2 L 695.1,24.2 L 700.9,24.1 L 706.8,24.1 L 712.6,24.1 L 718.5,24.0 L 724.3,24.0 L 730.2,24.0 L 736.0,24.0 L 736.0,244 Z" class="area"/><polyline points="57.8,237.6 63.7,231.3 69.5,225.2 75.4,219.1 81.2,213.2 87.1,207.8 92.9,202.6 98.8,197.7 104.6,192.8 110.5,188.0 116.3,183.4 122.2,178.7 128.0,174.3 133.8,169.8 139.7,165.5 145.5,161.2 151.4,157.0 157.2,152.9 163.1,148.8 168.9,144.7 174.8,140.8 180.6,136.9 186.5,133.1 192.3,129.4 198.2,125.8 204.0,122.2 209.8,118.7 215.7,115.3 221.5,111.9 227.4,108.5 233.2,105.2 239.1,101.9 244.9,98.7 250.8,95.4 256.6,92.3 262.5,89.1 268.3,86.2 274.2,83.4 280.0,80.5 285.8,77.7 291.7,75.0 297.5,72.2 303.4,69.8 309.2,67.4 315.1,65.2 320.9,63.1 326.8,61.0 332.6,59.2 338.5,57.4 344.3,55.6 350.2,53.9 356.0,52.4 361.8,50.8 367.7,49.3 373.5,48.1 379.4,47.0 385.2,45.9 391.1,44.8 396.9,43.8 402.8,42.7 408.6,41.7 414.5,40.7 420.3,39.8 426.2,39.1 432.0,38.4 437.8,37.8 443.7,37.2 449.5,36.6 455.4,36.1 461.2,35.5 467.1,34.9 472.9,34.4 478.8,33.9 484.6,33.4 490.5,32.9 496.3,32.5 502.2,32.0 508.0,31.6 513.8,31.2 519.7,30.8 525.5,30.4 531.4,30.1 537.2,29.7 543.1,29.3 548.9,29.0 554.8,28.6 560.6,28.3 566.5,28.1 572.3,27.8 578.2,27.5 584.0,27.3 589.8,27.1 595.7,26.9 601.5,26.6 607.4,26.4 613.2,26.2 619.1,26.0 624.9,25.8 630.8,25.6 636.6,25.5 642.5,25.3 648.3,25.1 654.2,25.0 660.0,24.8 665.8,24.7 671.7,24.5 677.5,24.4 683.4,24.3 689.2,24.2 695.1,24.2 700.9,24.1 706.8,24.1 712.6,24.1 718.5,24.0 724.3,24.0 730.2,24.0 736.0,24.0" class="lineA"/><line x1="186.5" y1="133.1" x2="186.5" y2="244" class="grid quiebre"/><circle cx="186.5" cy="133.1" r="5" class="dotA"/><text x="194.5" y="125.1" class="val">50% del volumen</text><text x="194.5" y="141.1" class="tick">top 20% de locales (23)</text><line x1="391.1" y1="44.8" x2="391.1" y2="244" class="grid quiebre"/><circle cx="391.1" cy="44.8" r="5" class="dotA"/><text x="399.1" y="36.8" class="val">91% del volumen</text><text x="399.1" y="52.8" class="tick">top 50% de locales (58)</text><text x="52.0" y="268.0" text-anchor="start" class="tick">locales ordenados por volumen  →</text></svg></div>
+</section>
+
+<section>
+<div class="shead"><span class="num">11</span><div><h2>Formatos de local y geografía</h2>
+<p>Dónde rinde la marca por tipo de punto de venta y por barrio.</p></div></div>
+<div class="card"><h3>Por formato de local</h3><svg viewBox="0 0 760 334" class="chart"><text x="118" y="30" text-anchor="end" class="lab">DRUGSTORE</text><text x="118" y="44" text-anchor="end" class="tick">64 locales</text><rect x="130" y="16" width="480.0" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="620.0" y="30" class="val">4.978 u.</text><text x="620.0" y="44" class="tick">77,8 u. por local</text><text x="118" y="74" text-anchor="end" class="lab">MARKET</text><text x="118" y="88" text-anchor="end" class="tick">22 locales</text><rect x="130" y="60" width="199.6" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="339.6" y="74" class="val">2.070 u.</text><text x="339.6" y="88" class="tick">94,1 u. por local</text><text x="118" y="118" text-anchor="end" class="lab">BAR</text><text x="118" y="132" text-anchor="end" class="tick">14 locales</text><rect x="130" y="104" width="187.7" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="327.7" y="118" class="val">1.947 u.</text><text x="327.7" y="132" class="tick">139,1 u. por local</text><text x="118" y="162" text-anchor="end" class="lab">SHOPPING</text><text x="118" y="176" text-anchor="end" class="tick">3 locales</text><rect x="130" y="148" width="57.4" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="197.4" y="162" class="val">595 u.</text><text x="197.4" y="176" class="tick">198,3 u. por local</text><text x="118" y="206" text-anchor="end" class="lab">AEROPUERTO</text><text x="118" y="220" text-anchor="end" class="tick">8 locales</text><rect x="130" y="192" width="31.7" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="171.7" y="206" class="val">329 u.</text><text x="171.7" y="220" class="tick">41,1 u. por local</text><text x="118" y="250" text-anchor="end" class="lab">TRENES</text><text x="118" y="264" text-anchor="end" class="tick">4 locales</text><rect x="130" y="236" width="28.6" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="168.6" y="250" class="val">297 u.</text><text x="168.6" y="264" class="tick">74,2 u. por local</text><text x="118" y="294" text-anchor="end" class="lab">EESS</text><text x="118" y="308" text-anchor="end" class="tick">2 locales</text><rect x="130" y="280" width="1.6" height="19" rx="3" fill="#9DB068" opacity=".8"/><text x="141.6" y="294" class="val">17 u.</text><text x="141.6" y="308" class="tick">8,5 u. por local</text></svg>
+<div class="legendline"><span><b>Drugstore</b> es el volumen: 4.978 u. en 64 locales</span><span><b>Shopping y Bar</b> rinden más por local (198,3 y 139,1 u.)</span><span><b>Aeropuerto</b> el más flojo: 41,1 u. por local</span></div></div>
+<div class="card" style="margin-top:18px"><h3>Top 15 barrios</h3>
+<table><thead><tr><th>Barrio</th><th class="num">Locales</th><th class="num">Unidades</th><th class="num">u. / local</th><th></th></tr></thead>
+<tbody><tr><td class="nm">SAN NICOLAS</td><td class="num">21</td><td class="num strong">1.866</td><td class="num">88,9</td><td class="barcell"><span style="width:100.0%"></span></td></tr><tr><td class="nm">PALERMO</td><td class="num">11</td><td class="num strong">1.307</td><td class="num">118,8</td><td class="barcell"><span style="width:70.0%"></span></td></tr><tr><td class="nm">RETIRO</td><td class="num">6</td><td class="num strong">808</td><td class="num">134,7</td><td class="barcell"><span style="width:43.3%"></span></td></tr><tr><td class="nm">CABALLITO</td><td class="num">7</td><td class="num strong">644</td><td class="num">92,0</td><td class="barcell"><span style="width:34.5%"></span></td></tr><tr><td class="nm">BALVANERA</td><td class="num">3</td><td class="num strong">602</td><td class="num">200,7</td><td class="barcell"><span style="width:32.3%"></span></td></tr><tr><td class="nm">NUÑEZ</td><td class="num">3</td><td class="num strong">526</td><td class="num">175,3</td><td class="barcell"><span style="width:28.2%"></span></td></tr><tr><td class="nm">BELGRANO</td><td class="num">4</td><td class="num strong">475</td><td class="num">118,8</td><td class="barcell"><span style="width:25.5%"></span></td></tr><tr><td class="nm">AVELLANEDA</td><td class="num">2</td><td class="num strong">395</td><td class="num">197,5</td><td class="barcell"><span style="width:21.2%"></span></td></tr><tr><td class="nm">PUERTO MADERO</td><td class="num">3</td><td class="num strong">384</td><td class="num">128,0</td><td class="barcell"><span style="width:20.6%"></span></td></tr><tr><td class="nm">QUILMES</td><td class="num">5</td><td class="num strong">360</td><td class="num">72,0</td><td class="barcell"><span style="width:19.3%"></span></td></tr><tr><td class="nm">FLORES</td><td class="num">3</td><td class="num strong">345</td><td class="num">115,0</td><td class="barcell"><span style="width:18.5%"></span></td></tr><tr><td class="nm">BARRACAS</td><td class="num">3</td><td class="num strong">338</td><td class="num">112,7</td><td class="barcell"><span style="width:18.1%"></span></td></tr><tr><td class="nm">EZEIZA</td><td class="num">7</td><td class="num strong">328</td><td class="num">46,9</td><td class="barcell"><span style="width:17.6%"></span></td></tr><tr><td class="nm">RECOLETA</td><td class="num">6</td><td class="num strong">216</td><td class="num">36,0</td><td class="barcell"><span style="width:11.6%"></span></td></tr><tr><td class="nm">SAAVEDRA</td><td class="num">1</td><td class="num strong">200</td><td class="num">200,0</td><td class="barcell"><span style="width:10.7%"></span></td></tr></tbody></table></div>
+</section>
+
+
+
+
+<footer>Fuentes: sell-out por punto de venta de Open 25 (marzo a agosto 2026, agosto parcial al 14/08) y detalle de entregas facturadas a la cadena (al 14/08/2026).<br>
+Sell-out valorizado a PVP de la lista de alta de febrero 2026 (115 g $5.500 y $5.100 · 80 g $3.600 · 36 g $1.950), sin actualizar por inflación y sin incluir las unidades de promo 2 x. Cajas calculadas con los bultos de facturación: 16 u. para 115 g y 80 g, 60 u. para 36 g.</footer>
+</div>
 <script>
-const PRODS = ['CL 36gr','CA 36gr','CL 80gr','CA 80gr','Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr'];
-const RAW = [
-  [965,'AV. CORRIENTES 1299 (ESQ. TALCAHUANO)','SAN NICOLAS','MARKET',145,['CA 80gr','Sabor JS 115gr']],
-  [142,'FLORIDA 970','RETIRO','DRUGSTORE',142,['CA 80gr','Sabor JS 115gr']],
-  [149,'RECONQUISTA 601 (ESQ. TUCUMAN)','SAN NICOLAS','BAR',119,['CL 80gr','CA 80gr','Sabor C&C 115gr','Rústica 115gr']],
-  [214,'OLGA COSSETTINI 263 (ESQ. VICTORIA OCAMPO)','PUERTO MADERO','BAR',112,[]],
-  [146,'RECONQUISTA 899 (ESQ. PARAGUAY)','RETIRO','BAR',106,['CL 80gr','CA 80gr','Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [12,'AV. CABILDO 2102 (ESQ. JURAMENTO)','BELGRANO','DRUGSTORE',106,[]],
-  [954,'FLORIDA 715','SAN NICOLAS','MARKET',105,['CL 80gr','CA 80gr','Sabor C&C 115gr']],
-  [947,'AV. CORRIENTES 1498 (ESQ. PARANA)','SAN NICOLAS','MARKET',103,['Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [145,'AV. CORDOBA 315 (ESQ. ALEM)','RETIRO','BAR',103,['Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [356,'GUATEMALA 5451','PALERMO','DRUGSTORE',94,['CA 80gr']],
-  [330,'VEDIA 3626 - PISO 3 - LOCAL 1','SAAVEDRA','SHOPPING',94,['CA 80gr','Sabor JS 115gr']],
-  [380,'CRAMER 3300 - CABA','NUÑEZ','BAR',91,[]],
-  [359,'BARTOLOME MITRE 2799 (ESQ PUEYRREDON)','BALVANERA','DRUGSTORE',88,['Sabor JS 115gr']],
-  [243,'BARTOLOME MITRE 1101 (ESQ. CERRITO)','SAN NICOLAS','BAR',79,['CA 36gr','CL 80gr','Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [250,'AV. INDEPENDENCIA 1107','MONSERRAT','BAR',75,['Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [803,'SHOP.UNICENTER - PARANA 3745','MARTINEZ','MARKET',73,[]],
-  [369,'LAVALLE 1102 (ESQ. CERRITO)','SAN NICOLAS','DRUGSTORE',72,['Sabor C&C 115gr']],
-  [128,'AV. RIVADAVIA 2701 (ESQ. CASTELLI)','BALVANERA','DRUGSTORE',71,[]],
-  [351,'AV. SANTA FE 4507','PALERMO','DRUGSTORE',69,['Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [13,'FLORIDA 425','SAN NICOLAS','DRUGSTORE',65,[]],
-  [374,'AMENABAR 1202 - CABA','COLEGIALES','DRUGSTORE',64,['Sabor C&C 115gr']],
-  [308,'AV. ALICIA MOREAU DE JUSTO 750','PUERTO MADERO','DRUGSTORE',64,['CL 80gr','CA 80gr','Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [968,'AV. CABILDO 902 (ESQ. T. GARCIA)','PALERMO','MARKET',59,['Sabor C&C 115gr']],
-  [353,'AV. CORRIENTES 2500 (ESQ. LARREA)','BALVANERA','DRUGSTORE',59,[]],
-  [109,'AV. SANTA FE 4292 (ESQ. URIARTE)','PALERMO','DRUGSTORE',59,['Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [934,'AV. CABILDO 2501 (ESQ. AV. MONROE)','BELGRANO','MARKET',53,['CA 80gr','Sabor C&C 115gr']],
-  [236,'VIAMONTE 799 (ESQ. ESMERALDA 703)','SAN NICOLAS','BAR',46,['Sabor C&C 115gr']],
-  [116,'AV. SANTA FE 4596 (ESQ. GODOY CRUZ)','PALERMO','DRUGSTORE',46,[]],
-  [136,'AV. CORRIENTES 1674','SAN NICOLAS','DRUGSTORE',18,['CL 80gr']],
-  [235,'PERON 301 (ESQ. 25 DE MAYO)','SAN NICOLAS','BAR',19,['CL 36gr','CA 36gr','CA 80gr','Sabor JS 115gr','Sabor C&C 115gr']],
-  [713,'MACACHA GUEMES 260 - DIQUE 4','PUERTO MADERO','DRUGSTORE',23,['CL 80gr','CA 80gr','Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [335,'AV. SANTA FE 2180','RECOLETA','DRUGSTORE',36,['CL 80gr','CA 80gr','Sabor JS 115gr','Sabor C&C 115gr','Rústica 115gr']],
-  [10,'FLORIDA 512','SAN NICOLAS','DRUGSTORE',11,['CA 36gr','CL 80gr','CA 80gr','Sabor C&C 115gr']],
-  [9,'FLORIDA 605','SAN NICOLAS','DRUGSTORE',8,['CA 36gr','Sabor JS 115gr','Sabor C&C 115gr']]
-];
-
-const data = RAW.map(r => ({id:r[0],dir:r[1],barrio:r[2],fmt:r[3],vtas:r[4],broken:r[5],q:r[5].length}));
-
-let sortCol = 'vtas', sortAsc = false;
-
-const fmtSel = document.getElementById('fmtFilter');
-const barrioSel = document.getElementById('barrioFilter');
-const prodSel = document.getElementById('prodFilter');
-const qSel = document.getElementById('qFilter');
-const searchEl = document.getElementById('search');
-
-[...new Set(data.map(d=>d.fmt))].sort().forEach(f=>{
-  const o=document.createElement('option'); o.value=f; o.textContent=f; fmtSel.appendChild(o);
+document.getElementById('q').addEventListener('input',e=>{
+  const v=e.target.value.toLowerCase();
+  document.querySelectorAll('#tt tbody tr').forEach(r=>{r.style.display=r.dataset.s.includes(v)?'':'none'});
 });
-[...new Set(data.map(d=>d.barrio))].sort().forEach(b=>{
-  const o=document.createElement('option'); o.value=b; o.textContent=b; barrioSel.appendChild(o);
-});
-PRODS.forEach(p=>{
-  const o=document.createElement('option'); o.value=p; o.textContent=p; prodSel.appendChild(o);
-});
-
-document.getElementById('prodLegend').innerHTML =
-  '<span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-right:4px">Productos:</span>' +
-  PRODS.map((p,i)=>`<span class="prod-legend-item"><span class="prod-legend-dot" style="background:#${['1D9E75','5DCAA5','EF9F27','E24B4A','A32D2D','791F1F','3B6D11'][i]}"></span>${p}</span>`).join('');
-
-function getFiltered() {
-  const txt = searchEl.value.toLowerCase();
-  const fmt = fmtSel.value, barrio = barrioSel.value;
-  const prod = prodSel.value, qv = qSel.value;
-  return data.filter(d => {
-    if(txt && !d.dir.toLowerCase().includes(txt) && !d.barrio.toLowerCase().includes(txt)) return false;
-    if(fmt && d.fmt !== fmt) return false;
-    if(barrio && d.barrio !== barrio) return false;
-    if(prod && !d.broken.includes(prod)) return false;
-    if(qv==='0' && d.q!==0) return false;
-    if(qv==='1' && (d.q<1||d.q>2)) return false;
-    if(qv==='3' && d.q<3) return false;
-    return true;
+document.querySelectorAll('#tt thead th').forEach((th,i)=>{
+  let asc=false;
+  th.addEventListener('click',()=>{
+    asc=!asc;
+    const tb=document.querySelector('#tt tbody');
+    const rows=[...tb.rows];
+    const num=th.classList.contains('num');
+    rows.sort((a,b)=>{
+      let x=a.cells[i].innerText.replace(/\./g,'').replace(',','.').replace('—','0');
+      let y=b.cells[i].innerText.replace(/\./g,'').replace(',','.').replace('—','0');
+      return num?(asc?x-y:y-x):(asc?x.localeCompare(y):y.localeCompare(x));
+    });
+    rows.forEach(r=>tb.appendChild(r));
   });
-}
-
-function sortBy(col) {
-  if(sortCol===col) sortAsc=!sortAsc;
-  else { sortCol=col; sortAsc = (col!=='vtas'&&col!=='q'); }
-  document.querySelectorAll('[id^="s-"]').forEach(el => el.textContent='↕');
-  const arrow = document.getElementById('s-'+col);
-  if(arrow) arrow.textContent = sortAsc ? '↑' : '↓';
-  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
-  const sorted = document.querySelector(`th[onclick*="${col}"]`);
-  if(sorted) sorted.classList.add('sorted');
-  render();
-}
-
-const TOTAL_RELEVADAS = 34;
-const QUIEBRES_BASE = {
-  'CL 36gr': 1, 'CA 36gr': 4, 'CL 80gr': 9, 'CA 80gr': 13,
-  'Sabor JS 115gr': 16, 'Sabor C&C 115gr': 20, 'Rústica 115gr': 11
-};
-
-function renderBars(filtered) {
-  const container = document.getElementById('barsContainer');
-  const prodOrder = ['Sabor C&C 115gr','Sabor JS 115gr','CA 80gr','Rústica 115gr','CL 80gr','CA 36gr','CL 36gr'];
-
-  const quiebresByProd = {};
-  PRODS.forEach(p => quiebresByProd[p] = 0);
-  filtered.forEach(d => d.broken.forEach(p => quiebresByProd[p]++));
-
-  const isFiltered = filtered.length < data.length;
-  const total = isFiltered ? filtered.length : TOTAL_RELEVADAS;
-
-  container.innerHTML = prodOrder.map(p => {
-    const broken = isFiltered ? quiebresByProd[p] : QUIEBRES_BASE[p];
-    const ok = total - broken;
-    const pctNo = total > 0 ? Math.round(broken / total * 100) : 0;
-    const pctOk = 100 - pctNo;
-    const color = pctNo >= 40 ? 'var(--red)' : pctNo >= 20 ? 'var(--amber)' : 'var(--green)';
-    return `<div class="bar-row">
-      <span class="bar-prod-label" title="${p}">${p}</span>
-      <div class="bar-track">
-        <div class="bar-ok" style="width:${pctOk}%"></div>
-        <div class="bar-no" style="width:${pctNo}%"></div>
-      </div>
-      <span class="bar-pct" style="color:${color}">${pctNo}%</span>
-      <span class="bar-count">${broken} de ${total}</span>
-    </div>`;
-  }).join('');
-}
-
-function render() {
-  const filtered = getFiltered();
-  filtered.sort((a,b) => {
-    let va=a[sortCol], vb=b[sortCol];
-    if(typeof va==='string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
-    return sortAsc ? va-vb : vb-va;
-  });
-
-  const tbody = document.getElementById('tbody');
-  if(!filtered.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="no-results">Sin resultados para este filtro</td></tr>';
-  } else {
-    tbody.innerHTML = filtered.map(d => {
-      const qcls = 'bq' + Math.min(d.q, 5);
-      const dots = PRODS.map(p =>
-        `<span class="dot-p ${d.broken.includes(p)?'dot-no':'dot-ok'}" title="${p}: ${d.broken.includes(p)?'sin stock':'con stock'}"></span>`
-      ).join('');
-      const prodTags = d.q===0
-        ? '<span class="full-line">Línea completa</span>'
-        : d.broken.map(p=>`<span class="prod-tag-no">${p}</span>`).join('');
-      return `<tr>
-        <td style="color:#888780;font-size:11px">${d.id}</td>
-        <td title="${d.dir}">${d.dir}</td>
-        <td>${d.barrio}</td>
-        <td><span class="fmt-tag">${d.fmt}</span></td>
-        <td style="text-align:right;font-weight:600">${d.vtas}</td>
-        <td style="text-align:center"><span class="badge-q ${qcls}">${d.q}</span></td>
-        <td><div class="prod-dots">${dots}</div><div class="prod-tags">${prodTags}</div></td>
-      </tr>`;
-    }).join('');
-  }
-
-  const total = filtered.length;
-  const conQ = filtered.filter(d=>d.q>0).length;
-  const sinQ = filtered.filter(d=>d.q===0).length;
-  const totQ = filtered.reduce((s,d)=>s+d.q,0);
-  const totPos = total * 7;
-
-  document.getElementById('k1').textContent = total;
-  document.getElementById('k2').textContent = conQ;
-  document.getElementById('k2s').textContent = total ? Math.round(conQ/total*100)+'% del total' : '—';
-  document.getElementById('k3').textContent = totQ;
-  document.getElementById('k3s').textContent = `de ${totPos} posibles (${totPos ? Math.round(totQ/totPos*100) : 0}%)`;
-  document.getElementById('k4').textContent = sinQ;
-  document.getElementById('k4s').textContent = total ? Math.round(sinQ/total*100)+'% del total' : '—';
-  document.getElementById('counter').textContent = `${total} sucursales`;
-  renderBars(filtered);
-}
-
-[fmtSel, barrioSel, prodSel, qSel, searchEl].forEach(el => el.addEventListener('input', render));
-sortBy('vtas');
-</script>
-</body>
-</html>
+});
+</script></body></html>
